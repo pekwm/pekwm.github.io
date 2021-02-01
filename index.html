@@ -2,43 +2,54 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pekwm: X window manager back from the past</title>
-
-    <link href="bootstrap-5.0.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
           crossorigin="anonymous">
-    <meta name="theme-color" content="#7952b3">
-    
-    <!-- Custom styles for this template -->
-    <link href="pekwm.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="pekwm.css">
   </head>
   <body>
-    <header class="site-header sticky-top py-1">
-      <nav class="container d-flex flex-column flex-md-row justify-content-between">
-        <a class="py-2 d-none d-md-inline-block"
-           href="https://pekdon.github.com/pekwm-themes">Themes</a>
-        <a class="py-2 d-none d-md-inline-block"
-           href="https://github.com/pekdon/pekwm">Developed on Github</a>
-      </nav>
-    </header>
 
-    <main>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
-        <div class="col-md-5 p-lg-5 mx-auto my-5">
-          <img src="pekwm_logo.svg" width="482" height="176"
-               class="display-4 fw-normal"/>
-          <p class="lead fw-normal">X window manager back from the past</p>
-          <a class="btn btn-outline-secondary"
-             href="https://github.com/pekdon/pekwm">Developed on Github</a>
-        </div>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.github.com" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://pekdon.github.com/pekwm-themes" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
       </div>
+    </div>
 
-      <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-        <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-          <div class="my-3 py-3">
-            <h2 class="display-5">Features</h2>
-            <p class="lead">Why you should use this thing!</p>
+    <div class="splash-container">
+      <div class="splash">
+        <img width="482" alt="pekwm logo"
+             class="pure-img-responsive" src="pekwm_logo.svg" />
+        <p class="splash-subhead">
+          X window manager back from the past
+        </p>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <h2 class="content-head is-center">Dive right in!</h2>
+
+        <div class="pure-g">
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-star"></i>
+              Features
+            </h3>
+            <p>
             <ul>
               <li>Lightweight and Unobtrusive.</li>
               <li>Very configurable, we all work and think in different ways.</li>
@@ -48,31 +59,61 @@
               </li>
               <li>Chainable Keygrabber, usability for everyone.</li>
             </ul>
+            </p>
           </div>
-        </div>
-        <div class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-          <div class="my-3 p-3">
-            <h2 class="display-5">Themes</h2>
-            <p class="lead">Everyone loves eyecandy!</p>
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+            <h3 class="content-subhead">
+              <i class="fa fa-comments"></i>
+              Get in touch!
+            </h3>
             <p>
-              Get themes from the <a href="https://pekdon.github.io/pekwm-themes/">pekwm
-                theme page</a>
+              The best way to get in touch with the pekwm community
+              currently is joining <strong>#pekwm</strong> IRC channel
+              on <a href="https://freenode">freenode</a>
+            </p>
+          </div>
+          <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-2">
+            <h3 class="content-subhead">
+              <i class="fa fa-automobile"></i>
+              Get pekwm from source
+            </h3>
+            <p>
+              If you want to install pekwm from source, follow these steps:
+            </p>
+            <p>
+              Get the sources:
+              <pre>git clone https://github.com/pekdon/pekwm.git</pre>
+              Build with <a href="https://cmake.org/">CMake:</a>:
+              <pre>mkdir pekwm/build
+cd pekwm/build
+cmake ..
+make</pre>
+              Install:
+              <pre>make install</pre>
             </p>
           </div>
         </div>
       </div>
-    </main>
 
-    <footer class="container py-5">
-      <div class="row">
-        <div class="col-12 col-md">
-          <small class="d-block mb-3 text-muted">&copy; 2021 Claes Nästén</small>
+      <div class="ribbon l-box-lrg pure-g">
+        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-8">
+          <img width="675" alt="pekwm 0.1.7 screenshot"
+               class="pure-img-responsive" src="pekwm-0.1.17.png">
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-2-4">
+
+          <h2 class="content-head content-head-ribbon">So what does it look like?</h2>
+          <p>
+            pekwm-0.1.17 default theme with two a terminal grouped
+            together with xcalc.
+          </p>
         </div>
       </div>
-    </footer>
 
-    <script src="bootstrap-5.0.bundle.min.js"
-            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-            crossorigin="anonymous"></script>
+      <div class="footer l-box is-center">
+        &copy; 2021 Claes Nästén
+      </div>
+    </div>
+
   </body>
 </html>
