@@ -6,12 +6,16 @@
 
 body {
     line-height: 1.7em;
-    color: #fff;
+    color: #7f8c8d;
     font-size: 13px;
 }
 
-h1, h2, h3, h4, h5, h6, label {
+a {
     color: #ec6f08;
+}
+
+h1, h2, h3, h4, h5, h6, label {
+    color: #34495e;
 }
 
 .pure-img-responsive {
@@ -23,19 +27,9 @@ h1, h2, h3, h4, h5, h6, label {
     padding: 1em;
 }
 
-.l-box-lrg-odd {
+.l-box-lrg {
     padding: 2em;
-    background: #666;
-}
-
-.l-box-lrg-even {
-    padding: 2em;
-    background: #ccc;
-    color: #000;
-}
-
-.l-box-lrg-even .content-head {
-    color: #494949;   
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .is-center {
@@ -105,12 +99,11 @@ a.pure-button-primary {
 
 .splash-container {
     background: #ccc;
-    color: #000;
     z-index: 1;
     overflow: hidden;
     /* The following styles are required for the "scroll-over" effect */
     width: 100%;
-    height: 400px;
+    height: 500px;
     top: 0;
     left: 0;
     position: fixed !important;
@@ -149,7 +142,7 @@ a.pure-button-primary {
 .content-wrapper {
     /* These styles are required for the "scroll-over" effect */
     position: absolute;
-    top: 400px;
+    top: 500px;
     width: 100%;
     min-height: 12%;
     z-index: 2;
@@ -159,16 +152,17 @@ a.pure-button-primary {
 
 /* We want to give the content area some more padding */
 .content {
-    color: #000;
     padding: 1em 1em 3em;
+    margin-top: 3em;
 }
 
 /* This is the class used for the main content headers (<h2>) */
 .content-head {
-    font-weight: bold;
+    color: #ec6f08;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin: 1em 0 1em;
+    margin: 2em 0 1em;
 }
 
 /* This is a modifier class used when the content-head is inside a ribbon */
@@ -186,7 +180,8 @@ a.pure-button-primary {
 
 /* This is the class used for the dark-background areas. */
 .ribbon {
-    margin-bottom: 50px;
+    background: #000;
+    color: #aaa;
 }
 
 /* This is the class used for the footer */
@@ -251,20 +246,78 @@ a.pure-button-primary {
 
 pre {
     font-size: 0.9em;
-    line-height: 1.1em;
-    color: #000;
     background-color: #eee;
     padding: 0.2em;
     overflow-y: scroll;
 }
 
-.hl-kw {
-    color: #ec6f08;
+.photo-box, .text-box {
+    overflow: hidden;
+    position: relative;
+    height: 250px;
+    text-align: center;
 }
-.hl-comment {
-    color: #999;
+
+.photo-box-thin {
+    height: 120px;
 }
-.hl-text {
+
+
+.photo-box img {
+    max-width: 100%;
+    height: auto;
+    min-height: 250px;
+}
+
+.photo-box aside {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1em 0.5em;
+    color: white;
+    width: 100%;
+    font-size: 80%;
+    font-weight: bold;
+    text-align: right;
+    /* FF3.6+ */
+    background: -moz-linear-gradient(top,  rgba(16,27,30,0) 0%, rgba(12,2,2,1) 90%);
+    /* Chrome10+,Safari5.1+ */
+    background: -webkit-linear-gradient(top,  rgba(16,27,30,0) 0%,rgba(12,2,2,1) 90%);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top,  rgba(16,27,30,0) 0%,rgba(12,2,2,1) 90%);
+    /* IE10+ */
+    background: -ms-linear-gradient(top,  rgba(16,27,30,0) 0%,rgba(12,2,2,1) 90%);
+    /* W3C */
+    background: linear-gradient(to bottom,  rgba(16,27,30,0) 0%,rgba(12,2,2,1) 90%);
+}
+
+.photo-box aside span {
+    color: #fff;
+}
+
+.photo-box aside span a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.text-box {
+    background: #ccc;
     color: #000;
-    background-color: #fff;
+}
+
+.text-box-head {
+    color: #ec6f08;
+    margin: 2em 0 1em;
+    padding-top: 1em;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 24px;
+}
+
+.text-box-subhead {
+    color: #000;
+    font-weight: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
