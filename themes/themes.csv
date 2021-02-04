@@ -2,8 +2,6 @@ name git-remote git-branch homepage author title description
 Detour https://github.com/okraits/pekwm-theme-detour.git main https://github.com/okraits/pekwm-theme-detour Oliver_Kraitschy Detour_theme_for_pekwm Detour,_ported_from_the_E17_Detour_theme_by_Alberto_Castro_aka_Tokyo.
 LightOne https://github.com/okraits/pekwm-theme-lightone.git main https://github.com/okraits/pekwm-theme-lightone Oliver_Kraitschy LightOne,_port_of_the_E16_theme_by_kvas LightOne,_ported_from_the_E16_LightOne_theme_by_kvas.
 benu https://github.com/vicgeralds/benu.git master https://github.com/vicgeralds/benu Victor_Geraldsson BeOS_style_theme_for_pekwm 
-default https://github.com/pekdon/pekwm.git master  adriano.src pekwm_default_theme_by_adriano.src 
-default-plain https://github.com/pekdon/pekwm.git master  Claes_Nästén pekwm_default_plain_theme_(no_images) 
 ion-p https://github.com/pekdon/pekwm-theme-ion-p.git main https://github.com/pekdon/pekwm-theme-ion-p Claes_Nästén ION_styled_themes_for_pekwm 
 lila https://github.com/pekdon/pekwm-theme-lila.git main https://github.com/pekdon/pekwm-theme-lila Claes_Nästén Original_theme,_previously_named_purple-p Original_theme_from_the_early_days_of_pekwm,_created_on_Solaris
 m0nst4 https://github.com/okraits/pekwm-theme-m0nst4.git main https://github.com/okraits/pekwm-theme-m0nst4 Oliver_Kraitschy m0nst4,_Fluxbox_styled_theme_for_pekwm m0nst4,_ported_from_the_Fluxbox_m0nst4_theme_by_Christoph_Strake_aka_chr1z.
