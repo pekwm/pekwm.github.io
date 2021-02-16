@@ -56,15 +56,20 @@
               Features
             </h3>
             <p>
-            <ul>
-              <li>Lightweight and Unobtrusive.</li>
-              <li>Very configurable, we all work and think in different ways.</li>
-              <li>
-                Automatic properties, make things appear as they
-                should when starting applications.
-              </li>
-              <li>Chainable Keygrabber, usability for everyone.</li>
-            </ul>
+              <ul>
+                <li>
+                  Automatic Properties
+                  <ul>
+                    <li>Decor Rules</li>
+                    <li>Title Rules</li>
+                    <li>Window Properties</li>
+                  </ul>
+                </li>
+                <li>Chainable Keybindings</li>
+                <li>Highly Configurable</li>
+                <li>Window Grouping</li>
+                <li>Unobtrusive</li>
+              </ul>
             </p>
           </div>
           <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
@@ -88,31 +93,73 @@
             </p>
             <p>
               Get the sources:
-              <pre>git clone https://github.com/pekdon/pekwm.git</pre>
+              <pre>$ <span class="hl-kw">git</span> clone https://github.com/pekdon/pekwm.git</pre>
               Build with <a href="https://cmake.org/">CMake</a>:
-              <pre>mkdir pekwm/build
-cd pekwm/build
-cmake ..
-make</pre>
+              <pre>$ <span class="hl-kw">mkdir</span> pekwm/build
+$ <span class="hl-kw">cd</span> pekwm/build
+$ <span class="hl-kw">cmake</span> ..
+$ <span class="hl-kw">make</span></pre>
               Install:
-              <pre>make install</pre>
+              <pre>$ <span class="hl-kw">make</span> install</pre>
             </p>
           </div>
         </div>
       </div>
 
-      <div class="ribbon l-box-lrg pure-g">
-        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-8">
-          <img width="675" alt="pekwm 0.1.7 screenshot"
-               class="pure-img-responsive" src="pekwm-0.1.17.png">
+      <div class="ribbon pure-g">
+        <!-- Window Grouping -->
+        <div class="l-box-lrg-even is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-8">
+          <img width="500" alt="window grouping illustration"
+               class="pure-img-responsive" src="static/images/grouping.png">
         </div>
-        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-2-4">
-
-          <h2 class="content-head content-head-ribbon">So what does it look like?</h2>
+        <div class="l-box-lrg-even pure-u-1 pure-u-md-1-2 pure-u-lg-2-4">
+          <h2 class="content-head content-head-ribbon">Window Grouping</h2>
           <p>
-            pekwm-0.1.17 default theme with two a terminal grouped
-            together with xcalc.
+            Window Grouping first seen in PWM brings tabbing to all
+            applications. Most modern applications now have tabs in
+            themselves but still does not allow grouping together
+            different applications into one group.
           </p>
+          <p>
+            In the illustration pekwm (with a PWM theme) shows an
+            xterm window and a xcalc window grouped together.
+          </p>
+        </div>
+
+        <!-- Decor Rules -->
+        <div class="l-box-lrg-odd pure-u-1 pure-u-md-1-2 pure-u-lg-2-4">
+          <h2 class="content-head content-head-ribbon">Decor Rules</h2>
+          <p>
+            Part of the automatic properties, or autoprops for short,
+            pekwm support setting the decoration of windows based on
+            the properties of a window.
+          </p>
+          <p>
+            In the illustration pekwm shows the effect of the below
+            decor rules setting a warning decoration on remote
+            terminals.
+          </p>
+          <p>
+            <pre><span class="hl-kw">DecorRules</span> {
+  <span class="hl-comment"># rule for local host, placed first to ensure remote
+  # rule does not match</span>
+  <span class="hl-kw">Property</span> = &quot;<span class="hl-text">term,^XTerm</span>&quot; {
+    <span class="hl-kw">Title</span> = &quot;<span class="hl-text">@$_HOSTNAME</span>&quot;
+    <span class="hl-kw">Decor</span> = &quot;<span class="hl-text">Default</span>&quot;
+  }
+  <span class="hl-comment"># rule for all hosts (@ in the title)</span>
+  <span class="hl-kw">Property</span> = &quot;<span class="hl-text">term,^XTerm</span>&quot; {
+    <span class="hl-kw">Title</span> = &quot;<span class="hl-text">@</span>&quot;
+    <span class="hl-kw">Decor</span> = &quot;<span class="hl-text">Warning</span>&quot;
+  }
+}</pre>
+          </p>
+          <p>
+          </p>
+        </div>
+        <div class="l-box-lrg-odd is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-8">
+          <img width="500" alt="decor rules illustration"
+               class="pure-img-responsive" src="static/images/decor-rules.png">
         </div>
       </div>
 
