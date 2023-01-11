@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: FAQ</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p><a href="themes.html">< Previous (Themes)</a>
+- <a href="index.html">Up</a>
+- <a href="development.html">(Development) Next ></a></p>
+<hr/>
+<h1 id="the-pekwm-faq">The pekwm FAQ</h1>
+<p>This is the official pekwm FAQ. Here you can find answers to the
+questions and cries for help frequently appearing in the pekwm IRC
+channel and mailing lists.</p>
+<p>If you can't find the answer to your question here, read the whole
+thing again. Chances are you just missed it the first time around. If
+you still can't find it, and you have gone through the documentation,
+tried until your fingers bleed from typing, and started a hunger
+strike against evil documentation projects that contain no helpful
+advices for you, then you may ask your question in IRC or on the
+mailing list.</p>
+<h1 id="common-questions-and-answers">Common questions and answers</h1>
+<h3 id="how-is-this-~/.pekwm/start-thing-used?">How is this ~/.pekwm/start thing used?</h3>
+<p>The file <em>~/.pekwm/start</em> is a regular shell script that is executed
+when pekwm starts. The file needs to be chmodded as executable for it
+to get used:</p>
+
+<pre>chmod +x ~/.pekwm/start
+</pre>
+<p>A simple example start file could look like this:</p>
+
+<pre>#!/bin/sh
+gkrellm &
+pekwm_bg -D -l ~/backgrounds mybackground.png &
+</pre>
+<p>Remember the &'s.</p>
+<h3 id="what-is-the-harbour-and-how-is-it-used?">What is the harbour and how is it used?</h3>
+<p>Harbour is pekwm's way of supporting dockapps, special small
+applications that usually display things like system information or
+the status of your email inbox. It's essentially the same thing you
+might know as a dock or a wharf. The harbour is not a KDE/GNOME
+systray for notification icons. If you want notification icons in the
+harbour, you need to find a dockapp that does this for you.</p>
+<p>If a dockapp doesn't go into the harbour even if you have it enabled at
+compile time, you should see if the application has an option to start
+it "withdrawn".</p>
+<h3 id="can-i-have-automatically-changing-menus-in-pekwm?">Can I have automatically changing menus in pekwm?</h3>
+<p>Yes. The Dynamic keyword is a way to use automatically generated menus
+in pekwm. That is, menus that regenerate every time you view them. As
+an example, by default the themes menu is dynamic.</p>
+<p>See <a href="#config-menu-dynamic">Dynamic Menus</a> for more information.</p>
+<h3 id="how-do-i-install-themes?">How do I install themes?</h3>
+<p>The idea is to unpack/uncompress the theme file you downloaded into
+some directory. In this case, we will unpack it to <em>~/.pekwm/themes</em>,
+which is the standard location for user installed themes.</p>
+<p>For simplicity, first ensure the themes directory exist, and if not,
+make it by issuing the command:</p>
+
+<pre>mkdir ~/.pekwm/themes
+</pre>
+<p>Then copy the theme package, lets call it <em>theme.tar.gz</em>, into
+<em>~/.pekwm/themes</em>. Then uncompress the theme pack with the appropriate
+tool. Unpack the theme with:</p>
+
+<pre>gzip -dc theme.tar.gz | tar xvf -
+</pre>
+<p>You will then end up with a new subdirectory - this is the theme.</p>
+<p>Since we uncompressed the theme in a standard location, after this you
+can select the new theme from the themes menu. If you installed in a
+non-standard location, you'll have to manually edit
+<em>~/.pekwm/config</em>.</p>
+<p>In the top of this file there is a section named <em>"Files {}"</em>. In this
+section, there is a line that says something along the lines of:</p>
+
+<pre>Theme = "/usr/local/share/pekwm/themes/minimal"
+</pre>
+<p>Edit this line to point to the directory you installed the
+theme. Restart pekwm and you're all set.</p>
+<h3 id="i-upgraded-pekwm-and-now-.........-it-won't-work!">I upgraded pekwm and now ......... it won't work!</h3>
+<p>pekwm has not yet achieved a freeze on it's configuration file
+syntax. And as pekwm is an actively developed application, there
+probably have been some changes on some part of the configuration.</p>
+<p>If you encounter a situation that when you upgrade your pekwm, and
+some thing just stops to work, you should either:</p>
+<p><em>Move your old configuration out of the way</em> - Move your pekwm
+configuration files out of <em>~/.pekwm</em>:</p>
+
+<pre>mv ~/.pekwm ~/old.pekwm**
+</pre>
+<p>This will result in new fresh configuration files being copied in. If
+this helps, your configuration files weren't compatible with the new
+version of pekwm.</p>
+<p><em>Check NEWS.md</em> - If something configuration wise has been changed, it
+has been documented in the NEWS.md for the release.This is a helpful
+resource when you want to convert your old configuration files to a
+newer configuration format.</p>
+<p><em>Look under the source trees data/ directory for reference</em> - If you
+can't find info about a new feature or for some reason you don't
+understand the brief explanation on the wiki, there is a data/
+directory in the source package of pekwm that has example
+configuration files (these act as the default configuration on a new
+install). Chances are you'll find help from there.</p>
+<p><em>Read the documentation.</em> - You can find links to up to date
+documentation for your pekwm version at the pekwm homepage.</p>
+<p><em>Make sure the right executable is being executed.</em> - Locate all
+instances of pekwm:</p>
+
+<pre>find / -name 'pekwm'
+</pre>
+<p>If you see many pekwm executables laying around, maybe one in
+<em>/usr/bin</em> and one in <em>/usr/local/bin</em>, you might be starting a wrong
+version pekwm. This might happen when you for example, install a
+premade pekwm package for your distribution and later install pekwm
+from source yourself. For safety purposes, remove all these pekwm
+instances and either re-apply the package or do <strong>make install</strong> again
+in the source. You can also, of course, go through every pekwm binary
+with the --version parameter to find the right executable to
+keep. Remember to give the full path to the executable when querying for
+the version (<strong>/usr/local/bin/pekwm --version</strong>).</p>
+<h3 id="can-i-turn-off-sloppy-focus-option?">Can I turn off sloppy focus option?</h3>
+<p>Yes. You can. You need to make all enter and leave events not affect
+the focus of frames, borders, clients. See the comments above the
+ line in <em>~/.pekwm/mouse</em>.</p>
+<p>See <a href="actions.html#keys-and-mouse">Mouse Bindings</a> for more info on the
+mouse configuration file.</p>
+<h3 id="what-is-mod1?-how-about-mod4?">What is Mod1? How about Mod4?</h3>
+<p>In the <em>~/.pekwm/keys</em> and <em>~/.pekwm/mouse</em> there are all these odd
+Mod1 and Mod4 things used as modifier keys. It's simple - Mod1 is more
+widely known as the Alt key, and Mod4 as the "windows key" found on
+recent keyboards. Use <strong>xev</strong> to find out what names keys carry.</p>
+<h3 id="why-do-my-terminals-start-the-wrong-size-when-grouped?">Why do my terminals start the wrong size when grouped?</h3>
+<p>This is a very complicated issue in fact, and has to do with the way
+terminals handle their resize actions. One way to bring at least some
+help to this situation is to put <strong>resize > /dev/null</strong> in your
+.bashrc or equal.</p>
+<h3 id="where-can-i-find-the-current-size/position-of-a-window?">Where can I find the current size/position of a window?</h3>
+<p>Use the command <strong>xwininfo | grep geometry</strong>.</p>
+<h3 id="how-do-i-bring-up-the-window-menu-when-the-window-has-no-decorations?">How do I bring up the window menu when the window has no decorations?</h3>
+<p>You press keys. The default keybinding for window menu is at the
+moment first Ctrl+Mod1+M, then W (or Mod4+W for short). You can
+specify your own keybinding for window menu at the <em>~/.pekwm/keys</em>
+configuration file. See <a href="actions.html#keys-and-mouse">Key Bindings</a> for
+information on how to edit keybindings.</p>
+<h3 id="the-start-file-doesn't-work!">The start file doesn't work!</h3>
+
+<pre>chmod +x ~/.pekwm/start
+</pre>
+<p>Yes, this is a duplicate of the first FAQ entry. Just making sure we
+never have to see this question in IRC anymore.</p>
+<h3 id="how-do-i-set-a-background/root/desktop-image?">How do I set a background/root/desktop image?</h3>
+<p>pekwm now comes with a background setting tool, <em>pekwm_bg</em> which is
+integrated with the themes and will set the background on theme load
+if the theme has a backgrund specified.</p>
+<p>pekwm_bg can be run independent of pekwm to set the background, see
+the <a href="pekwm_bg.1.md">pekwm_bg manual page</a> for more details.</p>
+<h3 id="a-theme-i-tested-doesn't-work!">A theme I tested doesn't work!</h3>
+<p>pekwm is an ongoing process. This means the theme file format has gone
+thrpugh considerable amounts of changes. Some of these changes are
+backwards compatible, some are not. Chances are, you may have hit a theme with
+too old or too new theme syntax for your copy of pekwm. Nothing can be done
+unless someone who knows the differences between theme formats owes
+you a favour and agrees to edit it out for you.</p>
+<p>pekwm shouldn't refuse to start again after a faulting theme test, but
+you will usually see everything scrambled up. In this case you can
+either try to select a new working theme from the menu or change the
+theme used manually. This is done in <em>~/.pekwm/config</em>. Under the
+Files-section, there is an entry named Theme, that points to your
+current theme. It might look something like this:</p>
+
+<pre>Files {
+    Theme = "/home/shared/.pekwm/themes/blopsus9-blaah"
+}
+</pre>
+<p>Now, all you need to do is make the path point to any theme you know
+is working. The default theme is usually a safe bet. After it has been edited
+and saved, (re)start pekwm.</p>
+<h3 id="what-desktop-pagers-work-with-pekwm?">What desktop pagers work with pekwm?</h3>
+<p>For general use, any NETWM compliant pager should
+do. <a href="http://www.useperl.ru/ipager/index.en.html">IPager</a>,
+<a href="http://zelea.com/project/screenpager/introduction.html">screenpager</a>,
+rox-pager, fbpanel's pager, obpager, gai-pager, gnome's pager, kde's
+pager, perlpanel's pager, netwmpager, and so on. Do report your
+success stories with pagers not already mentioned here.</p>
+<h3 id="how-do-i-make-submenus-open-on-mouse-over-rather-than-when-clicked?">How do I make submenus open on mouse over rather than when clicked?</h3>
+<p>You need to edit <em>~/.pekwm/config</em>. Open it in an editor and search
+for the Menu section towards the end of the file. It should look
+somewhat like this:</p>
+
+<pre>Menu {
+    # Defines how menus act on mouse input.
+    # Possible values are: "ButtonPress ButtonRelease DoubleClick Motion"
+    # To make submenus open on mouse over, comment the default Enter,
+    # uncomment the alternative, and reload pekwm.
+ 
+    Select = "Motion"
+    Enter = "ButtonPress"
+    # Enter = "Motion"
+    Exec = "ButtonRelease"
+}
+</pre>
+<p>To make submenus open on mouse over, remove or comment out the line</p>
+
+<pre>    Enter = "ButtonPress"
+</pre>
+<p>and remove the # character from this line:</p>
+
+<pre>    # Enter = "Motion"
+</pre>
+<p>so that it looks like this:</p>
+
+<pre>    Enter = "Motion"
+</pre>
+<p>and you should be fine. Reload pekwm configuration from the menu or
+press ctrl+mod1+delete to do it with a keybinding. Test your
+semiautomatic pekwm menus!</p>
+<p>The default requires you to click because of dynamic menus. While
+reasonably fast, they can sometimes take a second or two to be
+generated depending on the script behind it. Browsing the menu tree
+can become more annoying at such times, specially on a slower machine,
+than having to perform that extra click. There you have it, our reasoning
+and the solution for if you don't like it.</p>
+<h3 id="my-keyboard-doesn't-have-the-window-keys,-the-default-key-bindings-suck!">My keyboard doesn't have the window keys, the default key bindings suck!</h3>
+<p>Probably the easiest way to use the default keybindings on a keyboard
+that has no window keys is to assign some other key the Mod4
+status. Since Caps Lock is one of the most unused and annoying keys
+around, we'll make it the Mod4 modifier by adding the following lines
+to <em>~/.pekwm/start</em>:</p>
+
+<pre># Make Caps Lock act as Mod4
+xmodmap -e "remove lock = Caps\_Lock"
+xmodmap -e "add mod4 = Caps\_Lock"
+</pre>
+<p>Remember to:</p>
+
+<pre>chmod +x ~/.pekwm/start
+</pre>
+<p>Then restart pekwm. Your caps lock key should now act as Mod4. Oh joy!</p>
+<h3 id="where's-my-unicode-support?">Where's my Unicode support?</h3>
+<p>Edit your favorite theme to use your preferred Unicode font, and enjoy
+all kinds of characters on the titlebars and menus.</p>
+<h3 id="where-did-my-titlebar-buttons-go?">Where did my titlebar buttons go?</h3>
+<p>Buttons require a name to be set when template based syntax is enabled
+in themes or the last button will be the only visible one.</p>
+<p>Using this syntax will create only one button:</p>
+
+<pre>Require {
+ Templates = "True"
+}
+
+Buttons {
+ Left {
+   @button
+ }
+ Left {
+   @button
+ }
+}
+</pre>
+<p>Given names, both buttons will be created:</p>
+
+<pre>Require {
+ Templates = "True"
+}
+
+Buttons {
+ Left = "button1" {
+   @button
+ }
+ Left = "button2" {
+   @button
+ }
+}
+</pre>
+<h3 id="how-can-i-disable-the-workspace-indicator-popup?">How can I disable the workspace indicator popup?</h3>
+<p>In the main configuration file under the Screen section there should
+be a ShowWorkspaceIndicator parameter, set this to 0 to disable the
+WorkspaceIndicator.</p>
+<h3 id="why-is-nvidia-dual-head-misbehaving?">Why is nvidia dual-head misbehaving?</h3>
+<p>The nvidia proprietary driver provides dual head information both in
+Xinerama and RANDR form. The RANDR information given by the driver is
+in the form of one large screen, the Xinerama is divided up into
+multiple heads. To work around this the HonourRandr option has been
+introduced in the Screen section of the main configuration file. Set
+it to False, making pekwm only listen on the Xinerama information.</p>
+
+<pre>Screen {
+    HonourRandr = "False"
+</pre>
+<h3 id="mouse-scrolling-does-not-work-with-gtk3-applications?">Mouse scrolling does not work with GTK3 applications?</h3>
+<p>pekwm version prior to 0.2.0 required the use of the environment
+variable  set to 1.</p>
+<p>If starting pekwm from .xinitrc or .xsession this could be achieved by
+starting pekwm like this:</p>
+
+<pre>GDK_CORE_DEVICE_EVENTS=1
+export GDK_CORE_DEVICE_EVENTS
+
+pekwm
+</pre>
+<p>pekwm 0.2.0 and later scrolling should work with the default
+configuration, however if there are <strong>Client</strong> bindings in the mouse
+file for buttons 4 and 5 without any modifiers, setting the above trick
+with GDK_CORE_DEVICE_EVENTS might still be required.</p>
+<h3 id="cannot-switch-back-to-fullscreen-windows-with-nextframe-or-similar-commands">Cannot switch back to fullscreen windows with NextFrame or similar commands</h3>
+<p>Some applications (notably games) could iconify themselves when losing
+focus. So if you switch to another window with NextFrame, PrevFrame or
+their MRU equivalents and could not switch back to the original
+window, this may be because iconified windows are hidden in those
+menus by default.</p>
+<p>You should be able to see and select them with 
+command. But if you want to fix your "Alt-Tab", set the second
+argument to true to include iconified windows as well, e.g.</p>
+
+<pre>    KeyPress = "Mod1 Tab" { Actions = "NextFrameMRU TempRaise True" }
+</pre>
+<h3 id="what-if-i-must-change-system-wide-configuration-files-location?">What if I must change system-wide configuration files location?</h3>
+<p>By default pekwm installs its configuration files in /usr/etc/pekwm. However
+this can be overridden if your distro defaults its system-wide configuration
+files in a different location using the option -DCMAKE_INSTALL_SYSCONFDIR=/foo.
+See <a href="overview.html#compiling-pekwm">overview.md</a> for configure options, building
+and installing.</p>
+<h3 id="clicking-on-the-screen-edges-does-not-work!?">Clicking on the screen edges does not work!?</h3>
+<p>By default pekwm has the screen edges configured to react to mouse clicks and
+dragging windows warps them to a new workspace.</p>
+<p>If configuring pekwm with a single workspace the edges seemingly do nothing.</p>
+<p>They can be disabled by setting <em>EdgeSize</em> to <em>0</em> in ~/.pekwm/config
+under the Screen section.</p>
+<p>Example:</p>
+
+<pre>Screen {
+  ...
+  EdgeSize = "0"
+  ...
+}
+</pre>
+<hr/>
+<p><a href="themes.html">< Previous (Themes)</a>
+- <a href="index.html">Up</a>
+- <a href="development.html">(Development) Next ></a></p>
+      <div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: Autoproperties</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p><a href="configuration.html">< Previous (Configuration)</a>
+- <a href="index.html">Up</a>
+- <a href="actions.html">(Actions) Next ></a></p>
+<hr/>
+<h1 id="autoproperties">Autoproperties</h1>
+<p><strong>Table of Contents</strong></p>
+<ol>
+<li><a href="#what-are-autoproperties">What are Autoproperties?</a></li>
+<li><a href="#basic-autoproperties-syntax">Basic Autoproperties Syntax</a></li>
+<li><a href="#advanced-autoproperties">Advanced Autoproperties</a></li>
+<li><a href="#autogrouping">Autogrouping</a></li>
+<li><a href="#typerules">TypeRules</a></li>
+<li><a href="#getting-more-help">Getting more help</a></li>
+</ol>
+<h2 id="what-are-autoproperties?">What are Autoproperties?</h2>
+<p>"Autoproperties" is short for "Automatic Properties". This is pekwm's
+way of setting certain things up for applications based on the
+window's internal id. You can set up a lot of things, such as size,
+iconified state, start location, grouped state (automatically having
+one window group to another), workspace to start on, whether it has a
+border or titlebar, and more. It is also possible to automatically
+modify window titles and to decide the order of applications on the
+harbour with autoproperties.</p>
+<h2 id="basic-autoproperties-syntax">Basic Autoproperties Syntax</h2>
+<p>The ~/.pekwm/autoproperties file follows the rules in <a href="#common-syntax">Common
+Syntax</a>. This file can become rather complicated, but
+it's also the most powerful of any of pekwm's config files.</p>
+<p>The one important thing to remember is the Property tag. This
+identifier tells us where to apply properties; meaning which windows
+to apply it on. To find out the two terms, use <strong>xprop WM_CLASS</strong> and
+click on your window. Below you'll find a bash/zsh function which will
+give you the correct string for this file. You can also specify a
+regexp wildcard, such as ".*,opera", which means anything for the
+first word, opera for the second.</p>
+
+<pre>propstring () {
+  echo -n 'Property '
+  xprop WM_CLASS | sed 's/.*"\(.*\)", "\(.*\)".*/= "\1,\2" {/g'
+  echo '}'
+}
+</pre>
+<p>Autoproperties have both an old and new style matching clients. The
+new style was introduced to support using configuration template
+overwriting.</p>
+<p>In addition with WM_CLASS, pekwm also can identify clients by their
+title string (<strong>xprop WM_NAME</strong> or <strong>xprop _NET_WM_NAME</strong>).</p>
+
+<pre># New syntax, requires Require { Templates = "True" }
+Property = "^dillo,^Dillo,,Dillo: pekwm.org - not just another windowmanager" {
+    ApplyOn = "Start New"
+    Layer = "OnTop"
+}
+
+# Old syntax
+Property = "^dillo,^Dillo" {
+        Title = "Dillo: pekwm.org - not just another windowmanager"
+    ApplyOn = "Start New"
+    Layer = "OnTop"
+}
+</pre>
+<p>Or by their role (<strong>xprop WM_WINDOW_ROLE</strong>):</p>
+
+<pre># New syntax, requires Require { Templates = "True" }
+Property = "^gaim,^Gaim,preferences" {
+    ApplyOn = "New"
+    Skip = "Menus"
+}
+
+# Old syntax
+Property = "^gaim,^Gaim" {
+    Role = "preferences"
+    ApplyOn = "New"
+    Skip = "Menus"
+}
+</pre>
+<p>pekwm can rewrite window titles. This is done in a separate TitleRules
+section, where one defines properties regarding which clients to use the
+rewriting on and then a regexp rule of what to do to that clients
+title. These rules do not affect the actual WM_NAME string. You can
+use Role and Title keywords to narrow down the clients to whom the titlerule
+applies. A simple rule that would change "Title: this is the title"
+to "this is the title" looks like this:</p>
+
+<pre>TitleRules {
+    Property = "^foo,^bar" {
+        Rule = "/Title: (.*)/\\1/"
+    }
+}
+</pre>
+<p>In pekwm, you can make certain windows have their own decoration
+set. The different decorations are defined in the theme, and they are
+connected to client windows with an autoproperty. These autoproperties
+reside in their own DecorRules subsection and look like this:</p>
+
+<pre>DecorRules {
+    Property = "^foo,^bar" {
+        Decor = "TERM"
+    }
+}
+</pre>
+<p>It's also possible to decide the order of applications that start in
+the harbour. As with TitleRules and DecorRules, there is it's own
+separate section for this purpose called Harbour. Position is a signed
+int and order goes: "1 2 3 0 0 0 -3 -2 -1", and so on. That looked
+cryptic. Not to worry. Basically, a Position number of 0 means the
+application will be placed in the middle. If the number is positive,
+the application will be placed before the zero-positioned
+applications. If the number is negative, the applications will be
+placed after the zero-position ones. So the positive numbered show up
+first in your harbour, then the zero numbered, and after the zeros
+come the negatively numbered applications. I hope this is clear, as the
+next part is tricky.</p>
+<p>The larger the value of the base number the
+closer to the zero applications they will be. So the smaller the base
+number the closer to the ends of the harbour the application will
+be. Position 1 would be the first application to show up on the
+harbour. And similarly Position -1 would be the last application on
+the harbour. If you have application on the harbour that do not match
+any of the property rules on the Harbour section, they will act as if
+you had given them Position 0. Applications with the same Position
+will show up next to each other in the order they are launched. In our
+example below, obpager will always be placed the last on the harbour.</p>
+
+<pre>Harbour {
+    Property = "^obpager,^obpager" {
+        Position = "-1";
+    }
+}
+</pre>
+<p>If you want certain autoproperties to be applied only when you are on
+a specific workspace, you can add a workspace section. The following
+example sets an autoproperty that removes the border and titlebar from
+xterm on the second and third workspace. Please keep in mind that we
+start counting with 0.</p>
+
+<pre>Workspace = "1 2" {
+    Property = "xterm,XTerm" {
+        ApplyOn = "Start New Reload"
+        Border = "False"
+        Titlebar = "False"
+    }
+}
+</pre>
+<p>Here's an example ~/.pekwm/autoproperties file:</p>
+
+<pre>Property = ".*,^xmms" {
+    ApplyOn = "Start New"
+    Layer = "0"
+    Sticky = "True"
+}
+
+Property = "^xclock,^XClock" {
+    ApplyOn = "Start New"
+    FrameGeometry = "100x100+0-0"
+    Border = "False"; Titlebar = "False"
+    Sticky = "True"
+    Layer = "Desktop"
+}
+
+Property = "^dillo,^Dillo" {
+    ApplyOn = "Start New"
+    Group = "browsers" {
+        Size = "30"
+        Behind = "True"
+        Global = "False"
+    }
+}
+
+TitleRules {
+    Property = "^dillo,^Dillo" {
+        Rule = "/Dillo: (.*)/\1 [dillo]/"
+    }
+    Property = "^opera,^opera" {
+        Rule = "/...:... - (.*) - Opera .*/\\1 [opera]/"
+    }
+}
+
+DecorRules {
+    Property = "^.term,^XTerm" {
+        Decor = "TERM"
+    }
+}
+
+Harbour {
+    Property = "^obpager,^obpager" {
+        Position = "-1"
+    }
+}
+</pre>
+<blockquote><p><strong>Regular Expressions!</strong></p>
+<p>The pekwm autoproperties file uses Regular Expression syntax for
+wildcards. Regular expressions can be really confusing to people
+with no experience with them. A good rule of thumb is: "Anywhere
+you'd think to use '*', use '.*'". Also, '^' matches the beginning
+of a string, '$' matches the end, and '.' is any single
+character. Pekwm has some special flags that modify regular
+expression matching. Specifying regular expressions in the form
+/pattern/flags allow flags to be set. The supported flags are ! for
+inverting the match and i for case insensitive matches. Explaining
+the syntax of regular expressions goes beyond the scope of this
+documentation. You might want to look at
+<a href="http://www.regularexpressions.info/">http://www.regularexpressions.info/</a><a href="http://www.regularexpressions.info/"></a>
+or
+<a href="http://en.wikipedia.org/wiki/Regular">http://en.wikipedia.org/wiki/Regular</a>_expressions<a href="http://en.wikipedia.org/wiki/Regular"></a>.</p>
+</blockquote><h2 id="advanced-autoproperties">Advanced Autoproperties</h2>
+<p>Below is a list of the different actions available to you in your
+autoproperties file; These are the actual Auto Properties. They can
+take four types of arguments:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean</td>
+<td>Is either True (1) or False (0)</td>
+<td>true</td>
+</tr>
+<tr>
+<td>integer</td>
+<td>An Integer is a number, negative or positive</td>
+<td>42</td>
+</tr>
+<tr>
+<td>string</td>
+<td>A string is any string, it's used as an identifier</td>
+<td>MENU</td>
+</tr>
+<tr>
+<td>geom</td>
+<td>X Geometry String by the form "[=][<width>[%]{xX}<height>[%]][{+-}<xoffset>[%]{+-}<yoffset>[%]]</td>
+<td>200x100+0+0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exhaustive Autoprops List</strong></p>
+<p><strong>AllowedActions (string)</strong>
+<strong>DisallowedActions (string)</strong></p>
+<p>A list of actions to allow/deny performing on a client:</p>
+<ul>
+<li><em>Move</em>, (Dis)allow moving of the client window</li>
+<li><em>Resize</em>, (Dis)allow resizing of the client window</li>
+<li><em>Iconify</em>, (Dis)allow iconifying of the client window</li>
+<li><em>Shade</em>, (Dis)allow shading of the client window</li>
+<li><em>Stick</em>, (Dis)allow setting sticky state on the client window</li>
+<li><em>MaximizeHorizontal</em>, (Dis)allow maximizing the client window horizontally</li>
+<li><em>MaximizeVertical</em>, (Dis)allow maximizing the client window vertically</li>
+<li><em>Fullscreen</em>, (Dis)allow setting the client window in fullscreen mode</li>
+<li><em>SetWorkspace</em>, (Dis)allow changing of workspace</li>
+<li><em>Close</em>, (Dis)allow closing</li>
+</ul>
+<p><strong>ApplyOn (string)</strong></p>
+<p>A list of conditions outlining when to apply this autoprop (so be sure to
+include this in your property):</p>
+<ul>
+<li><em>New</em>, applies when the application first starts)</li>
+<li><em>Reload</em>, apply when pekwm's config files are reloaded)</li>
+<li><em>Start</em>, apply if window already exists before pekwm starts/restarts. Note: when using grouping Start will not take workspaces in account)</li>
+<li><em>Transient</em>, apply to Transient windows as well as normal windows. Dialog boxes are commonly transient windows</li>
+<li><em>TransientOnly</em>, apply to Transient windows only. Dialog boxes are commonly transient windows</li>
+<li><em>Workspace</em>, apply when the window is sent to another workspace</li>
+</ul>
+<p><strong>Border (bool)</strong></p>
+<p>Window starts with a border</p>
+<p><strong>CfgDeny (string)</strong></p>
+<p>A list of conditions of when to deny things requested by the client
+program:</p>
+<ul>
+<li><em>Above</em>, ignore client request to always place window above other windows)</li>
+<li><em>ActiveWindow</em>, ignore client requests for showing and giving input focus)</li>
+<li><em>Below</em>, ignore client request to always place window below other windows)</li>
+<li><em>Fullscreen</em>, ignore client request to set window to fullscreen mode)</li>
+<li><em>Hidden</em>, ignore client request to show/hide window)</li>
+<li><em>MaximizedHorz</em>, ignore client request to maximize window horizontally)</li>
+<li><em>MaximizedVert</em>, ignore client request to maximize window vertically)</li>
+<li><em>Position</em>, ignore client requested changes to window position)</li>
+<li><em>ResizeInc</em>, ignore resize increments from the size hints. Use on terminals to make them fill up all available space.</li>
+<li><em>Size</em>, ignore client requested changes to window size)</li>
+<li><em>Stacking</em>, ignore client requested changes to window stacking)</li>
+<li><em>Strut</em>, ignore client request for reserving space in the screen corners, typically done by panels and the like)</li>
+</ul>
+<p><strong>ClientGeometry (geom)</strong></p>
+<p>X Geometry String showing the initial size and position of the client,
+excluding the possible pekwm titlebar and window borders.</p>
+<p><strong>Decor (string)</strong></p>
+<p>Use the specified decor for this window. The decor has to be defined
+in the used theme. The decor is chosen by the first match in order:
+AutoProperty, TypeRules, DecorRules.</p>
+<p><strong>Focusable (bool)</strong></p>
+<p>Toggles if this client can be focused while it's running.</p>
+<p><strong>FocusNew (bool)</strong></p>
+<p>Toggles if this client gets focused when it initially pops up a
+window.</p>
+<p><strong>FrameGeometry (geom)</strong></p>
+<p>X Geometry String showing the initial size and position of the window
+frame. Window frame includes the client window and the possible pekwm
+titlebar and window borders. If both ClientGeometry and FrameGeometry
+are present, FrameGeometry overrides the ClientGeometry.</p>
+<p><strong>Fullscreen (bool)</strong></p>
+<p>Window starts in fullscreen mode</p>
+<p><strong>Group (string)</strong></p>
+<p>Defines the name of the group, in addition to containing all the
+grouping options. They are:</p>
+<ul>
+<li><em>Behind (bool)</em>, if true, makes new clients of a group not become the active one in the group.</li>
+<li><em>FocusedFirst (bool)</em>, if true, and there is more than one frame where the window could be autogrouped into, the currently focused frame is considered the first option.</li>
+<li><em>Global (bool)</em>, if true, makes new clients start in a group even if the group is on another workspace or iconified.</li>
+<li><em>Raise (bool)</em>, if true, makes new clients raise the frame they open in.</li>
+<li>_Size (integer), how many clients should be grouped in one group.</li>
+</ul>
+<p><strong>Icon (string)</strong></p>
+<p>Set _NET_WM_ICON on the specified window. Icon is loaded from the icon load path, <a href="configuration.html">see configuration</a> for details.</p>
+<p><strong>Iconified (bool)</strong></p>
+<p>Window starts Iconified</p>
+<p><strong>Layer (string)</strong></p>
+<p>Windows layer. Makes the window stay under or above other
+windows. Default layer is "Normal". Possible parameters are (listed
+from the bottommost to the topmost):</p>
+<ul>
+<li><em>Desktop</em></li>
+<li><em>Below</em></li>
+<li><em>Normal</em></li>
+<li><em>OnTop</em></li>
+<li><em>Harbour</em></li>
+<li><em>AboveHarbour</em></li>
+<li><em>Menu</em></li>
+</ul>
+<p><strong>MaximizedHorizontal (bool)</strong></p>
+<p>Window starts Maximized Horizontally</p>
+<p><strong>MaximizedVertical (bool)</strong></p>
+<p>Window starts Maximized Vertically</p>
+<p><strong>Opacity (int int)</strong></p>
+<p>Sets the focused and unfocused opacity values for the window. A value
+of 100 means completely opaque, while 0 stands for completely
+transparent.</p>
+<p>Note that a Composite Manager needs to be running for this feature to
+take effect.</p>
+<p><strong>PlaceNew (bool)</strong></p>
+<p>Toggles the use of placing rules for this client.</p>
+<p><strong>Role (string)</strong></p>
+<p>Apply this autoproperty on clients that have a WM_WINDOW_ROLE hint
+that matches this string. String is a regexp like: "^Main".</p>
+<p><strong>Shaded (bool)</strong></p>
+<p>Window starts Shaded</p>
+<p><strong>Skip (string)</strong></p>
+<p>A list of situations when to ignore the defined application and let
+the user action skip over it, consisting of:</p>
+<ul>
+<li><em>Snap</em>, do not snap to this window while moving windows)</li>
+<li><em>Menus</em>, do not show this window in pekwm menus other than the icon menu)</li>
+<li><em>FocusToggle</em>, do not focus to this window when doing Next/PrevFrame)</li>
+</ul>
+<p><strong>Sticky (bool)</strong></p>
+<p>Window starts Sticky (present on all workspaces)</p>
+<p><strong>Title (string)</strong></p>
+<p>Apply this autoproperty on clients that have a title that matches this
+string. String is a regexp like: "^Saving".</p>
+<p><strong>Titlebar (bool)</strong></p>
+<p>Window starts with a TitleBar</p>
+<p><strong>Workspace (integer)</strong></p>
+<p>Which workspace to start program on.</p>
+<h2 id="autogrouping">AutoGrouping</h2>
+<p>Autogrouping is actually very simple, although it might be a bit
+confusing at first. Group is an identifier, it's just a string, (in my
+example, we'll call it netwin). Size tells how many clients to group
+together in one frame.</p>
+<p>The example: We want to autogroup Sylpheed and Opera together,
+allowing as many instances of the program windows to be grouped as
+there are. Here's the Autoprops section for that:</p>
+
+<pre>Property = ".\*,^opera" {
+    Group = "netwin" {
+        Size = "0"
+    }
+    ApplyOn = "New Start Reload"
+}
+Property = ".\*,^Sylpheed" {
+    Group = "netwin" {
+        Size = "0"
+    }
+    ApplyOn = "New Start Reload Transient"
+}
+</pre>
+<p>This creates two rules: "For any window matching '.*,^opera', group
+these in the 'netwin' group. Apply this on pekwm start/reload and when
+new windows matching this property are opened, but do not include
+dialog windows", and "For any window matching '.*,^Sylpheed', group
+in the 'netwin' group. Apply on pekwm start/reload and when new
+windows matching this property are opened, also include possible
+dialog windows to the group. Open the window to the group but do not
+raise it automatically".</p>
+<p>To group unlimited windows together, use size 0.</p>
+<p>Also note that you can have as many Group identifiers as you
+want. Autogrouping is a very flexible system. Try playing around with
+it.</p>
+<h2 id="typerules">TypeRules</h2>
+<p>The TypeRules decides how the _NET_WM_WINDOW_TYPE should be
+interpreted. The _NET_WM_WINDOW_TYPE hint gives the application
+writer possibility to inform the window manager what kind of window it
+is creating.</p>
+<p>TypeRules are defined in the TypeRules section of the
+~/.pekwm/autoproperties file. A sample section could look something
+like this:</p>
+
+<pre>TypeRules {
+    ...
+
+    Property = "MENU"  {
+        Titlebar = "False"
+        Border = "False"
+        Skip = "FocusToggle Menus Snap"
+    }
+
+    ...
+}
+</pre>
+<p>Using TypeRules are done the same way as with <a href="#advanced-autoproperties">Advanced
+Autoproperrties</a> but the property is matched
+based on the value of _NET_WM_WINDOW_TYPE. Supported values are
+available in the list below.</p>
+<p><strong>Supported values</strong></p>
+<ul>
+<li><em>Desktop</em>, A desktop window such as the window containing desktop icons on the Gnome desktop.</li>
+<li><em>Dock</em></li>
+<li><em>Toolbar</em></li>
+<li><em>Menu</em></li>
+<li><em>Utility</em></li>
+<li><em>Splash</em>, Application startup screen usually presenting loading progress.</li>
+<li><em>Dialog</em>, Dialogs prompting for information such as "Save as" dialogs.</li>
+<li><em>Normal</em>, Any other window, can be used to set default autoproperties.</li>
+</ul>
+<h2 id="getting-more-help">Getting more help</h2>
+<p>Autoprops can be a daunting topic. If you've read everything here in
+the docs and are still having problems, feel free to hit the
+<a href="development#irc">IRC</a> channel and ask. Check the <a href="faq.html">Common questions
+and answers</a> before asking. Remember that: "IF YOU WANT AN
+ANSWER TO YOUR QUESTION, YOU HAD BETTER HAVE ALREADY READ THE
+DOCUMENTATION".</p>
+<hr/>
+<p><a href="configuration.html">< Previous (Configuration)</a>
+- <a href="index.html">Up</a>
+- <a href="actions.html">(Actions) Next ></a></p>
+      <div>
+    </div>
+  </body>
+</html>

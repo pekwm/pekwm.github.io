@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: pekwm_panel</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p>< Prev
+- <a href="index.html">Up</a>
+- Next ></p>
+<h1 id="pekwm_panel-overview">pekwm_panel overview</h1>
+<p>pekwm_panel is a simple panel application bundled with pekwm that aims
+to have a small core and be extensible using external scripts.</p>
+<p>pekwm_panel integrates with the pekwm themes and aims to support pekwm
+specific window hints.</p>
+<h2 id="configuration">Configuration</h2>
+<p>The default configuration is placed in <em>~/.pekwm/panel</em> and configures
+the <em>widgets</em> displayed, panel <em>placement</em> and external <em>commands</em>.</p>
+<h3 id="panel">Panel</h3>
+<p>The panel section contains configuration for the panel itself.</p>
+<p><strong>Placement</strong>, place panel at the <em>Top</em> or <em>Bottom</em> of the head.</p>
+<p><strong>Head</strong>, if present place the panel on the given head (number)
+instead of spanning all heads.</p>
+<h3 id="widgets">Widgets</h3>
+<p>All widgets share two common configuration parameters.</p>
+<h4 id="common-configuration">Common configuration</h4>
+<p><strong>Size</strong></p>
+<p>The <em>Size</em> parameter controls how much of the panel each widget is
+going to consume and can be specified in one of the units below.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pixels</td>
+<td>Integer</td>
+<td>Screen pixels, use only for fixed size widgets</td>
+</tr>
+<tr>
+<td>Percent</td>
+<td>1-100</td>
+<td>Percent of total panel width</td>
+</tr>
+<tr>
+<td>Required</td>
+<td>NA</td>
+<td>Calculated required width using the current theme</td>
+</tr>
+<tr>
+<td>TextWidth</td>
+<td>String</td>
+<td>Width of the provided string using the current theme</td>
+</tr>
+<tr>
+<td>*</td>
+<td>NA</td>
+<td>Use rest of available space, divided equally between all widgets with *</td>
+</tr>
+</tbody>
+</table>
+<p>The configuration below would distribute the available
+800 pixels as follows:</p>
+<ul>
+<li>DateTimeWidget, Size = "Required"</li>
+<li>Text, Size = "Pixels 250"</li>
+<li>ClientLIst, Size = "*"</li>
+</ul>
+<p>For simplicity space for the separators is excluded.</p>
+
+<pre>                          800px
+----------------------------------------------------------------------------
+|  [1]  |    [Text]      |                 [ClientList]                    |
+----------------------------------------------------------------------------
+  100px       250px                           450px
+</pre>
+<p><strong>Interval</strong> update interval in seconds</p>
+<h4 id="widget:-bar">Widget: Bar</h4>
+<p>Display a partially filled bar, where the fill percent is read from
+a field extracted from an external command.</p>
+<p>The fill percent should be a numeric value between 0.0 and 100.0,
+values below and and above will be set to 0.0 and 100.0 respectively.</p>
+<p>If it is not possible to parse the value it will default to 0.0.</p>
+<p>Example field output usable with the bar which will render the
+bar at 50%:</p>
+
+<pre>fill-percent 50
+</pre>
+<p>Widget configuration:</p>
+
+<pre>Bar = "field" {
+  Size = "Pixels 32"
+  Colors {
+    Percent = "80" { Color = "#00ff00" }
+    Percent = "40" { Color = "#ffff00" }
+    Percent = "10" { Color = "#ff0000" }
+  }
+}
+</pre>
+<h4 id="widget:-clientlist">Widget: ClientList</h4>
+<p>Display a list of clients on the current workspace together with the
+client icon if _NET_WM_ICON is set.</p>
+<p>Widget configuration:</p>
+
+<pre>ClientList {
+  Size = "*"
+}
+</pre>
+<h4 id="widget:-systray">Widget: Systray</h4>
+<p>Display system tray icons provided by programs like NetworkManager, VLC, etc.</p>
+<p>Widget configuration:</p>
+
+<pre>Systray {
+  Size = "Required"
+}
+</pre>
+<p>The size of the widget will adapt to the number of icons in the tray.</p>
+<h4 id="widget:-datetime">Widget: DateTime</h4>
+<p>Display date and time using a <em>strftime(3)</em> format string.</p>
+<p>Widget configuration:</p>
+
+<pre>DateTime = "%Y-%m-%d %H:%M" {
+  Size = "Required"
+  Interval = "60"
+}
+</pre>
+<h4 id="widget:-icon">Widget: Icon</h4>
+<p>Widget displaying an icon. The icon can be configured to update whenever
+a given external data field is updated.</p>
+
+<pre>Icon = "battery-icon-status" {
+  Size = "Pixel 32"
+  Icon = "battery.png"
+  # If True, scale image square to panel height
+  Scale = "False"
+}
+</pre>
+<p>NOTE: The widget expects all icons set by the external data field to
+have the same size.</p>
+<p>The Icon widget supports executing a command when it is clicked. To enable
+command execution add an Exec statement, the format of the command will be
+expanded the same way as the <em>Text</em> widget before being executed.</p>
+<h4 id="widget:-text">Widget: Text</h4>
+<p>Display formatted text. The format string can reference environment
+variables, external command data and specific window manager state
+variables.</p>
+<p>The widget is updated whenever any field in the format string is
+updated.</p>
+<p>It is recommended to use <em>TextWidth</em> for the <em>Size</em> parameter to
+handle font size differences between themes.</p>
+<p>All format string variables start with <strong>%</strong>, the second character
+determine which type of data is referenced.</p>
+<ul>
+<li><strong>%_</strong>, reference environment variables. Example: _<em><em>%USER</em></em>.</li>
+<li><strong>%:</strong>, reference window manager state, see table below.</li>
+<li><strong>%</strong>, reference external command data.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:CLIENT_NAME:</td>
+<td>Name of the active client</td>
+</tr>
+<tr>
+<td>:WORKSPACE_NAME:</td>
+<td>Name of the active workspace</td>
+</tr>
+<tr>
+<td>:WORKSPACE_NUMBER:</td>
+<td>Active workspace number</td>
+</tr>
+</tbody>
+</table>
+<p>Widget configuration:</p>
+
+<pre>Text = "format string" {
+  Size = "TextWidth _value_"
+}
+</pre>
+<h4 id="transform">Transform</h4>
+<p>The <strong>Text</strong> and <strong>Icon</strong> widgets support transformation of the value
+of the field the widget is using. For the <strong>Text</strong> widget the
+formatted string is transformed.</p>
+<p>The transformation can be used if the value of pre-defined fields,
+such as X11 atoms, requires some change before it can be used.</p>
+<p>Transform takes the same form as TitleRules do in pekwm, and is
+configured using the <strong>Transform</strong> keyword.</p>
+<p>Example using the _XKB_RULES_NAMES atom to display a keyboard language
+indicator in the panel. The _XKB_RULES_NAMES is a multi value string
+looking something like "evdev,pc105,us,,".</p>
+<p>The below example shows the use of a transform, to display kbd-en.png,
+kbd-se.png etc. icon depending on the current keyboard layout.</p>
+
+<pre>Icon = "ATOM__XKB_RULES_NAMES" {
+  Icon = "kbd.png"
+  Transform = "/^[^,]*,[^,]*,([^,]*),.*/\\1/"
+}
+</pre>
+<h3 id="commands">Commands</h3>
+<p>The <strong>Commands</strong> section of the panel configuration includes
+configuration for external commands which pekwm_panel will run at
+given intervals to collect data displayed by the <em>Text</em> and <em>Bar</em>
+widgets.</p>
+<p>The commands run shall output data in the given format:</p>
+<p><em>field</em>[space]<em>value</em></p>
+<p>Example:</p>
+
+<pre>field1 value one
+field2 value two
+</pre>
+<h3 id="long-running-commands">Long running commands</h3>
+<p>pekwm_panel parses data as it is output by the command and it is thus
+possible to have a single long-running command providing data for all
+widgets requiring external data.</p>
+<p>It is recommended to use long-running commands if frequent updates of
+the displayed data is required.</p>
+<p>A simple example displaying the current time every second without
+using the <em>DateTime</em> widget could look this:</p>
+<p><strong>date.sh</strong></p>
+
+<pre>#!/bin/sh
+
+while `/usr/bin/true`; do
+    echo date `date`
+    sleep 1
+done
+</pre>
+<p><strong>panel</strong></p>
+
+<pre>Commands {
+  Command = "/path/to/date.sh" {
+    # time to wait between runs if date.sh crash
+    Interval = "3600"
+  }
+}
+
+Widgets {
+  Text = "date" {
+    Size = "TextWidth _Ddd Mmm 00 00:00:00 ZZZ YYYY_"
+  }
+}
+</pre>
+      <div>
+    </div>
+  </body>
+</html>

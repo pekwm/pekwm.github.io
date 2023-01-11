@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: Overview</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p>< Prev
+- <a href="index.html">Up</a>
+- <a href="basic-usage.html">(Basic Usage) Next ></a></p>
+<hr/>
+<h1 id="an-overview-of-pekwm">An overview of pekwm</h1>
+<p>pekwm is a fast, functional, and flexible window manager which aims to
+be usable, even without a mouse.</p>
+<p><strong>Table of Contents</strong></p>
+<ol>
+<li><a href="#an-introduction-to-pekwm">An Introduction to pekwm</a></li>
+<li><a href="#getting-pekwm">Getting pekwm</a></li>
+<li><a href="#compiling-pekwm">Compiling pekwm</a></li>
+</ol>
+<h2 id="an-introduction-to-pekwm">An Introduction to pekwm</h2>
+<p>pekwm, a window manager written by Claes Nästén, was once based on
+the aewm++ window manager, but has since evolved enough that it no
+longer resembles aewm++ at all. pekwm also has an expanded feature-set,
+including window grouping (similar to ion, pwm, or fluxbox), auto
+properties, Xinerama support and keygrabber that supports keychains,
+and much more.</p>
+<h3 id="why-pekwm?">Why pekwm?</h3>
+<p>"Why make another window manager?", some ask. I say,"Why not?". Some of you may
+argue that it's better to have a single standard desktop environment, so that
+our mothers can find their way around, but in all honesty, if most of us wanted
+the same environment as our mothers, we probably wouldn't be reading this
+anyway. The same can also be applied to your sister, your roommate, your wife,
+even your cat...</p>
+<p>"Why should I use pekwm?", others may ask. Well, you don't have to! However, we
+use it, and you're welcome to try it out as well. As always,you should use the
+environment most suited to you. For a more comprehensive answer to this
+question, check out the <a href="#pekwm-features">pekwm Features</a> section below.</p>
+<h3 id="pekwm-features">pekwm Features</h3>
+<p>Here's a short list of some of the features included in pekwm:</p>
+<ul>
+<li>Possibility to group windows in a single frame</li>
+<li>Configurable keygrabber that supports keychains</li>
+<li>Configurable mouse actions</li>
+<li>Configurable root- and window-menus and keybindings for all menus</li>
+<li>Dynamic menus that regenerate on every view from a script output</li>
+<li>Multi-screen support both via RandR and Xinerama</li>
+<li>Configurable window placement</li>
+<li>Theming support with images, shaping and configurable buttons.</li>
+<li>Autoproperties (Automatic properties such as a window's sticky state, etc.)</li>
+</ul>
+<h2 id="getting-pekwm">Getting pekwm</h2>
+<p>Now that you've decided to try it out, you need to know how to get it, for which
+there are two options. The first is to download and compile the source, and the
+second is finding a pre-compiled package.</p>
+<h3 id="getting-the-pekwm-source">Getting the pekwm source</h3>
+<p>The source code is available from Github at <a href="https://github.com/pekdon/pekwm">https://github.com/pekdon/pekwm</a>.</p>
+<p>Release tabralls are named pekwm-0.2.0.tar.gz and
+pekwm-0.2.0.tar.bz2. Although it doesn't matter which you get, keep in
+mind that the .bz2 is smaller in comparison.</p>
+<p>Generally speaking, pekwm from GIT is stable enough for everyday use and should,
+in most cases, be a safe bet to get all the latest functionality.</p>
+<h3 id="getting-prebuilt-pekwm-packages">Getting prebuilt pekwm packages</h3>
+<p>pekwm is available as a package on many Linux and BSD distributions,
+for further details, refer to your distribution.</p>
+<h2 id="compiling-pekwm">Compiling pekwm</h2>
+<p>This chapter will help you compile pekwm.</p>
+<h3 id="unpacking-the-archive">Unpacking the Archive</h3>
+<p>The first step to compiling pekwm is to unpack the archive. Unpacking
+depends on which version you downloaded:</p>
+
+<pre>tar -zxvf pekwm-0.2.0.tar.gz
+tar -zjvf pekwm-0.2.0.tar.bz2
+</pre>
+<blockquote><p>The '-j' option works normally on most linux systems, and as of the
+current GNU tar development version, is part of GNU tar. If your
+system does not support the -j option, you can use two things:
+<strong>bzip2 -dc pekwm-0.2.0.tar.bz2 | tar -xvf -</strong> or <strong>bzip2 -d
+pekwm-0.2.0.tar.bz2</strong> followed by <strong>tar -xvf pekwm-0.2.0.tar</strong>. This
+also works for the .tar.gz version using <strong>gzip -dc</strong> or <strong>gzip
+-d</strong>.</p>
+</blockquote><p>The 'v' options are elective, they show you the filenames as they're
+being extracted. At this point, you should have a pekwm-0.2.0
+directory. Use <strong>cd pekwm-0.2.0</strong> to get there.</p>
+<h3 id="installing-build-dependencies">Installing build dependencies</h3>
+<p>Before building pekwm a C++ compiler with support for C++11 needs to
+be available on the system, the CMake build system and a set of X11
+and image libraries.</p>
+<p>The sections below describe how to install the required packages for
+different OSes and Linux distributions.</p>
+<h4 id="alpine">Alpine</h4>
+<p>Development tools using the GCC C++ compiler:</p>
+
+<pre># apk add cmake g++ make
+</pre>
+<p>Build dependencies:</p>
+
+<pre># apk add fontconfig-dev jpeg-dev libxext-dev libpng-dev libxft-dev libxpm-dev libxrandr-dev libxinerama-dev
+</pre>
+<h4 id="debian">Debian</h4>
+<p>Development tools using the GCC C++ compiler:</p>
+
+<pre># apt install cmake g++ make
+</pre>
+<p>Build dependencies:</p>
+
+<pre># apt install libfontconfig1-dev libjpeg-dev libxext-dev libpng-dev libxft-dev libxpm-dev libxrandr-dev libxinerama-dev
+</pre>
+<h4 id="void">Void</h4>
+<p>Development tools using the GCC C++ compiler:</p>
+
+<pre># xbps-install cmake make gcc
+</pre>
+<p>Build dependencies:</p>
+
+<pre># xbps-install fontconfig-devel libjpeg-turbo-devel libXext-devel libpng-devel libXft-devel libXpm-devel libXrandr-devel libXinerama-devel
+</pre>
+<h4 id="openbsd">OpenBSD</h4>
+<p>OpenBSD comes with X11 and a compatible C++ compiler. To add the
+required packages run:</p>
+
+<pre># pkg_add cmake jpeg png
+</pre>
+<h4 id="os-x-(homebrew)">OS X (homebrew)</h4>
+<p>OS X does not come with a X11 installation by default, so
+<a href="https://www.xquartz.org/">XQuartz</a> needs to be installed first.</p>
+<p>The development tools are not installed by default but can be
+installed using the following command:</p>
+
+<pre>xcode-select --install
+</pre>
+<p>Assuming homebrew is installed, the only package required to build
+pekwm after install XQuartz and the development tools is CMake:</p>
+
+<pre>$ brew install cmake
+</pre>
+<h3 id="setting-up-a-build-directory">Setting up a build directory</h3>
+<p>The first thing to do is to setup a build directory and configure
+pekwm using CMake:</p>
+
+<pre>mkdir build && cd build
+cmake ..
+</pre>
+<p>Pekwm support a few configuration options, each option is specified on
+the cmake command line as:</p>
+
+<pre>-DOPTION=ON
+</pre>
+<h3 id="common-options">Common options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMAKE_INSTALL_PREFIX</td>
+<td>/usr/local</td>
+<td>It may be useful to use a custom prefix to install the files.</td>
+</tr>
+<tr>
+<td>CMAKE_INSTALL_SYSCONFDIR</td>
+<td>/usr/etc/pekwm</td>
+<td>It may be useful to use a custom prefix to install the config files.</td>
+</tr>
+<tr>
+<td>CMAKE_BUILD_TYPE</td>
+<td></td>
+<td>Set to Debug to enable debug outputs and code</td>
+</tr>
+<tr>
+<td>PEDANTIC</td>
+<td>OFF</td>
+<td>Turn on extra compiler warnings</td>
+</tr>
+<tr>
+<td>TESTS</td>
+<td>OFF</td>
+<td>Enable compilation of unit test programs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-to-reduce-the-size">Options to reduce the size</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ENABLE_SHAPE</td>
+<td>ON</td>
+<td>Enables the use of the Xshape extension for non-rectangular windows.</td>
+</tr>
+<tr>
+<td>ENABLE_XINERAMA</td>
+<td>ON</td>
+<td>Enables Xinerama multi screen support</td>
+</tr>
+<tr>
+<td>ENABLE_PANGO</td>
+<td>ON</td>
+<td>Enable Pango font support in pekwm (themes).</td>
+</tr>
+<tr>
+<td>ENABLE_RANDR</td>
+<td>ON</td>
+<td>Enables RandR multi screen support</td>
+</tr>
+<tr>
+<td>ENABLE_XFT</td>
+<td>ON</td>
+<td>Enables Xft font support in pekwm (themes).</td>
+</tr>
+<tr>
+<td>ENABLE_IMAGE_XPM</td>
+<td>ON</td>
+<td>XPM image support using libXpm.</td>
+</tr>
+<tr>
+<td>ENABLE_IMAGE_JPEG</td>
+<td>ON</td>
+<td>JPEG image support using libjpeg.</td>
+</tr>
+<tr>
+<td>ENABLE_IMAGE_PNG</td>
+<td>ON</td>
+<td>PNG image support using libpng.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="building-and-installing">Building and installing</h3>
+<p>After running cmake with any configuration options you need, run <strong>make</strong>.
+This should only take a few minutes. After that, become root (unless you
+used a prefix in your home directory, such as
+-DCMAKE_INSTALL_PREFIX=/home/you/pkg) and type <strong>make install</strong></p>
+<p>Adding <strong>exec pekwm</strong> to ~/.xinitrc if you start X running <strong>startx</strong>
+or ~/.xsession if you use a display manager should usually be enough
+to get pekwm running.</p>
+<p>That's it! pekwm is installed on your computer now. Next you should
+read the <a href="basic-usage.html#getting-started">Getting Started</a> chapter.</p>
+<hr/>
+<p>< Prev
+- <a href="index.html">Up</a>
+<a href="basic-usage.html">(Basic Usage) Next ></a></p>
+      <div>
+    </div>
+  </body>
+</html>

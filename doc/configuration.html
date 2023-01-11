@@ -1,0 +1,1298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: Configuration</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p><a href="basic-usage.html">< Previous (Basic Usage)</a>
+- <a href="index.html">Up</a>
+- <a href="autoproperties.html">(Autoproperties) Next ></a></p>
+<hr/>
+<h1 id="configuration">Configuration</h1>
+<p>The configuration part of this documentation is focused on providing
+complete documentation for all config files located in your ~/.pekwm
+directory.</p>
+<p><strong>Table of Contents</strong></p>
+<ol>
+<li><a href="#basic-syntax">The pekwm Common Syntax for Config Files</a></li>
+<li><a href="#the-main-config-file">The main config file</a></li>
+<li><a href="#configuring-the-menus">Configuring the menus</a></li>
+<li><a href="#keyboard-and-mouse-configuration">Keyboard and Mouse Configuration</a></li>
+<li><a href="#the-pekwm-start-file">The pekwm start file</a></li>
+</ol>
+<h2 id="the-pekwm-common-syntax-for-config-files">The pekwm Common Syntax for Config Files</h2>
+<h3 id="basic-syntax">Basic Syntax</h3>
+<p>All pekwm config files (with the exception of the start file- see
+<a href="#the-pekwm-start-file">start file</a> ) follow a common syntax for options.</p>
+
+<pre># comment
+// another comment
+/*
+    yet another comment
+*/
+
+$VARIABLE = "Value"
+$_ENVIRONMENT_VARIABLE = "Value"
+INCLUDE = "another_configuration.cfg"
+COMMAND = "program to execute and add the valid config syntax it outputs here"
+
+# Normal format
+Section = "Name" {
+    Event = "Param" {
+        Actions = "action parameter; action parameter; $VAR $_VARIABLE"
+    }
+}
+
+// Compressed format
+Section = "Name" { Event = "Param" { Actions = "action parameters; action parameters; $VAR $_VARIABLE" } }
+</pre>
+<p>One can usually modify the spacing and line breaks, but this is the
+"Correct" format, so the documentation will try to stick to it.</p>
+<p>Events can be combined into the same line by issuing a semicolon
+between them. Actions can be combined into the same user action by
+issuing a semicolon between them. You can use an INCLUDE anywhere in
+the file.</p>
+<p>pekwm has a vars file to set common variables between config
+files. Variables are defined in vars and the file is INCLUDEd from the
+configuration files.</p>
+<p>Comments are allowed in all config files, by starting a comment line
+with # or //, or enclosing the comments inside /* and */.</p>
+<h3 id="template-syntax">Template Syntax</h3>
+<p>The pekwm configuration parser supports the use of templates to reduce
+typing. Template support is currently available in autoproperties and
+theme configuration files. Template configuration is not fully
+compatible with the non-template syntax and thus requires activation
+to not break backwards compatibility. To enable template parsing, start
+the configuration file with the following:</p>
+
+<pre>Require {
+    Templates = "True"
+}
+</pre>
+<p>Defining templates is just like creating an ordinary section; however it uses
+the special name Define. Below is an example defining a template named
+NAME:</p>
+
+<pre>Define = "NAME" {
+  Section = "Sub" {
+    ValueSub = "Sub Value"
+  }
+  Value = "Value"
+}
+</pre>
+<p>The above defined template can later be used by using the magic
+character @. The below example shows usage of the template NAME in a
+two sections named Name and NameOverride overriding one of the
+template values:</p>
+
+<pre>Section = "Name" {
+  @NAME
+}
+Section = "NameOverride" {
+  @NAME
+  Value = "Overridden value"
+}
+</pre>
+<p>The above example is equivalent of writing the following:</p>
+
+<pre>Section = "Name" {
+  Section = "Sub" {
+    ValueSub = "Sub Value"
+  }
+  Value = "Value"
+}
+Section = "Name" {
+  Section = "Sub" {
+    ValueSub = "Sub Value"
+  }
+  Value = "Overridden"
+}
+</pre>
+<h3 id="variables-in-pekwm-config-files">Variables In pekwm Config Files</h3>
+<p>pekwm config enables you to use both internal to pekwm variables, as
+well as global system variables. Internal variables are prefixed with
+a <strong>$</strong>, global variables with <strong>$_</strong>.</p>
+
+<pre># examples of how to set both type of variables
+$INTERNAL = "this is an internal variable"
+$_GLOBAL = "this is a global variable"
+
+# examples of how to read both type of variables
+RootMenu = "Menu" {
+    Entry = "$_GLOBAL" { Actions = "xmessage $INTERNAL" }
+}
+</pre>
+<p>There is one special global variable pekwm handles. It is called
+$_PEKWM_CONFIG_FILE. This global variable is read when pekwm
+starts, and it's contents will be used as the default config file. It
+will also be updated to point to the currently active config file if
+needed.</p>
+<p>A few other variables defined by pekwm:</p>
+<ul>
+<li>$_PEKWM_ETC_PATH points to the system configuration directory,
+set at compile time. This is usually /etc.</li>
+<li>$_PEKWM_SCRIPT_PATH points to the "scripts" directory of pekwm,
+e.g. /usr/share/pekwm/scripts.</li>
+<li>$_PEKWM_THEME_PATH points to the "themes" directory of pekwm,
+e.g. /usr/share/pekwm/themes.</li>
+<li>$_PEKWM_CONFIG_PATH contains the directory path of
+$_PEKWM_CONFIG_FILE</li>
+</ul>
+<p>Variables can probably be defined almost anywhere, but it's probably a
+better idea to place them at the top of the file, outside of any
+sections.</p>
+<h2 id="the-main-config-file">The main config file</h2>
+<p>The main config file is where all the base config stuff goes.</p>
+<h3 id="basic-config">Basic Config</h3>
+<p>As previously indicated, the config file follows the rules defined in
+<a href="#common-syntax">Common Syntax</a>.</p>
+<p>Here's an example ~/.pekwm/config file:</p>
+
+<pre>Files {
+    Keys = "~/.pekwm/keys"
+    Mouse = "~/.pekwm/mouse"
+    Menu = "~/.pekwm/menu"
+    Start = "~/.pekwm/start"
+    AutoProps = "~/.pekwm/autoproperties"
+    Theme = "~/.pekwm/themes/default"
+    Icons = "~/.pekwm/icons/"
+}
+
+MoveResize {
+    EdgeAttract = "10"
+    EdgeResist = "10"
+    WindowAttract = "5"
+    WindowResist = "5"
+    OpaqueMove = "True"
+    OpaqueResize = "False"
+}
+
+Screen {
+    Workspaces = "4"
+    WorkspacesPerRow = "2"
+    WorkspaceNames = "Main;Web;E-mail;Music"
+    ShowFrameList = "True"
+    ShowStatusWindow = "True"
+    ShowStatusWindowCenteredOnRoot = "False"
+    ShowClientID = "False"
+    ShowWorkspaceIndicator = "500"
+    FocusNew = "True"
+    PlaceNew = "True"
+
+    TrimTitle = "..."
+    FullscreenAbove = "True"
+    FullscreenDetect = "True"
+    HonourRandr = "True"
+    HonourAspectRatio = "True"
+    EdgeSize = "1 1 1 1"
+    EdgeIndent = "False"
+    DoubleClickTime = "250"
+
+    CurrHeadSelector = "Cursor"
+
+    Placement {
+        Model = "Smart"
+        WorkspacePlacements = "Smart;MouseCentered"
+        Smart {
+            Row = "False"
+            TopToBottom = "True"
+            LeftToRight = "True"
+            OffsetX = "0"
+            OffsetY = "0"
+        }
+    }
+
+    UniqueNames {
+        SetUnique = "True"
+        Pre = " #"
+        Post = ""
+    }
+}
+
+Menu {
+    DisplayIcons = "True"
+
+    Icons = "DEFAULT" {
+        Minimum = "16x16"
+        Maximum = "16x16"
+    }
+
+    Select = "Motion"
+    Enter = "Motion ButtonPress"
+    Exec = "ButtonRelease"
+}
+
+CmdDialog {
+    HistoryUnique = "True"
+    HistorySize = "1024"
+    HistoryFile = "~/.pekwm/history"
+    HistorySaveInterval = "16"
+}
+
+Harbour {
+    OnTop = "True"
+    MaximizeOver = "False"
+    Placement = "Right"
+    Orientation = "TopToBottom"
+    Head = "0"
+
+    DockApp {
+        SideMin = "64"
+        SideMax = "0"
+    }
+}
+</pre>
+<h3 id="config-file-keywords">Config File Keywords</h3>
+<p>Here's a table showing the different elements that can be used in your
+config file. Remember that 'boolean' means 'true' or 'false' and that
+all values should be placed inside quotes.</p>
+<p><strong>Config File Elements under the Files-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keys</td>
+<td>string</td>
+<td>The location of the keys file, such as ~/.pekwm/keys</td>
+</tr>
+<tr>
+<td>Menu</td>
+<td>string</td>
+<td>The location of the menu file, such as ~/.pekwm/menu</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>string</td>
+<td>The location of the start file, such as ~/.pekwm/start</td>
+</tr>
+<tr>
+<td>AutoProps</td>
+<td>string</td>
+<td>The location of the autoprops file, such as ~/.pekwm/autoproperties</td>
+</tr>
+<tr>
+<td>Theme</td>
+<td>string</td>
+<td>The location of the Theme directory, such as ~/.pekwm/themes/themename</td>
+</tr>
+<tr>
+<td>Icons</td>
+<td>string</td>
+<td>The location of the Icons directory, such as ~/.pekwm/icons</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the MoveResize-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EdgeAttract</td>
+<td>int</td>
+<td>The distance from screen edge required for the window to snap against it in pixels.</td>
+</tr>
+<tr>
+<td>EdgeResist</td>
+<td>int</td>
+<td>The distance from screen edge required for the window moving to start being resisted in pixels.</td>
+</tr>
+<tr>
+<td>WindowAttract</td>
+<td>int</td>
+<td>The distance from other clients that a window will snap against them to in pixels.</td>
+</tr>
+<tr>
+<td>WindowResist</td>
+<td>int</td>
+<td>The distance from other clients that a window movement will start being resisted.</td>
+</tr>
+<tr>
+<td>OpaqueMove</td>
+<td>boolean</td>
+<td>If true, turns on opaque Moving</td>
+</tr>
+<tr>
+<td>OpaqueResize</td>
+<td>boolean</td>
+<td>If true, turns on opaque Resizing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the Screen-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ThemeBackground</td>
+<td>boolean</td>
+<td>Set to False to disable background setting from themes. Default True.</td>
+</tr>
+<tr>
+<td>Workspaces</td>
+<td>int</td>
+<td>Number of workspaces enabled.</td>
+</tr>
+<tr>
+<td>WorkspacesPerRow</td>
+<td>int</td>
+<td>Number of workspaces on each row. If set to 0, all workspaces are placed on a single row.</td>
+</tr>
+<tr>
+<td>WorkspaceNames</td>
+<td>string</td>
+<td>List of names for workspaces separated by semicolon.</td>
+</tr>
+<tr>
+<td>ShowFrameList</td>
+<td>boolean</td>
+<td>Controls whether a list of all available frames on the workspace is displayed during the NextFrame/PrevFrame actions.</td>
+</tr>
+<tr>
+<td>ShowStatusWindow</td>
+<td>boolean</td>
+<td>Controls whether a size/position info window is shown when moving or resizing windows.</td>
+</tr>
+<tr>
+<td>ShowStatusWindowCenteredOnRoot</td>
+<td>boolean</td>
+<td>Controls whether a size/position info window is shown centered on the current head or the current window.</td>
+</tr>
+<tr>
+<td>ShowClientID</td>
+<td>boolean</td>
+<td>Should Client IDs be displayed in window titles.</td>
+</tr>
+<tr>
+<td>ShowWorkspaceIndicator</td>
+<td>int</td>
+<td>Show WorkspaceIndicator for N milliseconds. If set to 0, the WorkspaceIndicator is disabled.</td>
+</tr>
+<tr>
+<td>WorkspaceIndicatorScale</td>
+<td>int</td>
+<td>Changes the size of the WorkspaceIndicator, higher value means smaller size.</td>
+</tr>
+<tr>
+<td>WorkspaceIndicatorOpacity</td>
+<td>int</td>
+<td>Sets the opacity/transparency of the WorkspaceIndicator. A value of 100 means completely opaque, while 0 stands for completely transparent.</td>
+</tr>
+<tr>
+<td>FocusNew</td>
+<td>boolean</td>
+<td>Toggles if new windows should be focused when they pop up.</td>
+</tr>
+<tr>
+<td>FocusNewChild</td>
+<td>boolean</td>
+<td>Toggles if new transient windows should be focused when they pop up if the window they are transient for is focused.</td>
+</tr>
+<tr>
+<td>PlaceNew</td>
+<td>boolean</td>
+<td>Toggles if new windows should be placed using the rules found in the Placement subsection, or just opened on the top left corner of your screen.</td>
+</tr>
+<tr>
+<td>ReportAllClients</td>
+<td>boolean</td>
+<td>Toggles if all clients in a frame or only the active one should be reported and thus displayed in pager applications etc.</td>
+</tr>
+<tr>
+<td>TrimTitle</td>
+<td>string</td>
+<td>This string contains what pekwm uses to trim down overlong window titles. If it's empty, no trimming down is performed at all.</td>
+</tr>
+<tr>
+<td>FullscreenAbove</td>
+<td>boolean</td>
+<td>Toggles re-stacking of windows when going to and from fullscreen mode. Windows are re-stacked to the top of all windows when going to fullscreen and to the top of their layer when being restored from fullscreen. However, if another window is raised it will move fullscreen windows back to its layer. Next time a fullscreen window is raised, it's back to be on top of all windows again.</td>
+</tr>
+<tr>
+<td>FullscreenDetect</td>
+<td>boolean</td>
+<td>Toggles detection of broken fullscreen requests setting clients to fullscreen mode when requesting to be the size of the screen. Default true.</td>
+</tr>
+<tr>
+<td>HonourRandr</td>
+<td>boolean</td>
+<td>Toggles reading of XRANDR information, this can be disabled if the display driver gives both Xinerama and Randr information and only of the two is correct. Default true.</td>
+</tr>
+<tr>
+<td>HonourAspectRatio</td>
+<td>boolean</td>
+<td>Toggles if pekwm respects the aspect ratio of clients (XSizeHints). Default true.</td>
+</tr>
+<tr>
+<td>EdgeSize</td>
+<td>int int int int</td>
+<td>How many pixels from the edge of the screen should screen edges be. Parameters correspond to the following edges: top bottom left right. A value of 0 disables edges.</td>
+</tr>
+<tr>
+<td>EdgeIndent</td>
+<td>boolean</td>
+<td>Toggles if the screen edge should be reserved space.</td>
+</tr>
+<tr>
+<td>DoubleClickTime</td>
+<td>int</td>
+<td>Time, in milliseconds, between clicks to be counted as a doubleclick.</td>
+</tr>
+<tr>
+<td>CurrHeadSelector</td>
+<td>string</td>
+<td>Controls how operations relative to the current head, such as placement, select the active head. Cursor selects the head the cursor is on, FocusedWindow considers the focused window if any and then fall backs to the cursor position. Affected operations include placement and position of CmdDialog, SearchDialog, StatusWindow and focus toggle list.</td>
+</tr>
+<tr>
+<td>FontDefaultX11</td>
+<td>boolean</td>
+<td>If true, default font type is X11 else XMB if no font type is specified in font string.</td>
+</tr>
+<tr>
+<td>FontCharsetOverride</td>
+<td>string</td>
+<td>If set, overrides the charset of X11/XMB fonts with the specified string. Should be in format iso8859-1</td>
+</tr>
+</tbody>
+</table>
+<blockquote><p>NOTE: A Composite Manager needs to be running for opacity options to take effect.</p>
+</blockquote><p><strong>Config File Elements under the Placement-subsection of the Screen-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>string</td>
+<td>Default placement model, one of the below Placement Models.</td>
+</tr>
+<tr>
+<td>WorkspacePlacements</td>
+<td>string</td>
+<td>List of placement models for the workspaces separated by semicolon. For an explanation of the allowed options see "Model" above.</td>
+</tr>
+</tbody>
+</table>
+<p>Placement Models:</p>
+<ul>
+<li><em>Smart</em>, Tries to place windows where no other window is present</li>
+<li><em>Centered</em>, Places the window centered on the current head.</li>
+<li><em>MouseCentered</em>, Places the center of the window underneath the current mouse pointer position</li>
+<li><em>MouseTopLeft</em>, Places the top-left corner of the window under the pointer</li>
+<li><em>MouseNotUnder</em>, Places windows on screen corners avoiding the current mouse cursor position.</li>
+<li><em>CenteredOnParent</em>, Places transient windows at center of their parent window.</li>
+</ul>
+<p><strong>Config File Elements under the Smart-subsection of the Placement-subsection:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Row</td>
+<td>boolean</td>
+<td>Whether to use row or column placement, if true, uses row.</td>
+</tr>
+<tr>
+<td>TopToBottom</td>
+<td>boolean</td>
+<td>If false, the window is placed starting from the bottom.</td>
+</tr>
+<tr>
+<td>LeftToRight</td>
+<td>boolean</td>
+<td>If false, the window is placed starting from the right.</td>
+</tr>
+<tr>
+<td>OffsetX</td>
+<td>int</td>
+<td>Pixels to leave between new and old windows and screen edges. When 0, no space is reserved.</td>
+</tr>
+<tr>
+<td>OffsetY</td>
+<td>int</td>
+<td>Pixels to leave between new and old windows and screen edges. When 0, no space is reserved.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the UniqueNames-subsection of the Screen-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SetUnique</td>
+<td>boolean</td>
+<td>Decides if the feature is used or not. False or True.</td>
+</tr>
+<tr>
+<td>Pre</td>
+<td>string</td>
+<td>String to place before the unique client number.</td>
+</tr>
+<tr>
+<td>Post</td>
+<td>string</td>
+<td>String to place after the unique client number.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the CmdDialog-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HistoryUnique</td>
+<td>boolean</td>
+<td>If true, identical items in the history will only appear once where the most recently used is the first item. Default true.</td>
+</tr>
+<tr>
+<td>HistorySize</td>
+<td>int</td>
+<td>Number of entries in the history that should be kept track of. Default 1024.</td>
+</tr>
+<tr>
+<td>HistoryFile</td>
+<td>string</td>
+<td>Path to history file where history is persisted between session. Default ~/.pekwm/history</td>
+</tr>
+<tr>
+<td>HistorySaveInterval</td>
+<td>int</td>
+<td>Defines how often the history file should be saved counting each time the CmdDialog finish a command. Default 16.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the Menu-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DisplayIcons</td>
+<td>boolean</td>
+<td>Defines whether menus should render their icons. Default true.</td>
+</tr>
+<tr>
+<td>FocusOpacity</td>
+<td>int</td>
+<td>Sets the opacity/transparency for focused Menus. A value of 100 means completely opaque, while 0 stands for completely transparent.</td>
+</tr>
+<tr>
+<td>UnfocusOpacity</td>
+<td>int</td>
+<td>Sets the opacity/transparency for unfocused Menus.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Icons = "MENU"</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Minimum</td>
+<td>width x height</td>
+<td>Defines minimum size of icons, if 0x0 no check is done. Default 16x16.</td>
+</tr>
+<tr>
+<td>Maximum</td>
+<td>width x height</td>
+<td>Defines maximum size of icons, if 0x0 no check is done. Default 16x16.</td>
+</tr>
+<tr>
+<td>Select</td>
+<td>list of strings</td>
+<td>Decides on what mouse events to select a menu entry. List is space separated and can include "ButtonPress, ButtonRelease, DoubleClick, Motion, MotionPressed"</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>list of strings</td>
+<td>Decides on what mouse events to enter a submenu. List is space separated and can include "ButtonPress, ButtonRelease, DoubleClick, Motion, MotionPressed"</td>
+</tr>
+<tr>
+<td>Exec</td>
+<td>list of strings</td>
+<td>Decides on what mouse events to execute an entry. List is space separated anc can include "ButtonPress, ButtonRelease, DoubleClick, Motion, MotionPressed"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the Harbour-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Placement</td>
+<td>string</td>
+<td>Which edge to place the harbour on. One of Right, Left, Top, or Bottom.</td>
+</tr>
+<tr>
+<td>Orientation</td>
+<td>string</td>
+<td>From what to which direction the harbour expands. One of TopToBottom, BottomToTop, RightToLeft, LeftToRight.</td>
+</tr>
+<tr>
+<td>OnTop</td>
+<td>boolean</td>
+<td>Whether or not the harbour is "always on top"</td>
+</tr>
+<tr>
+<td>MaximizeOver</td>
+<td>boolean</td>
+<td>Controls whether maximized clients will cover the harbour (true), or if they will stop at the edge of the harbour (false).</td>
+</tr>
+<tr>
+<td>Head</td>
+<td>int</td>
+<td>When RandR or Xinerama is on, decides on what head the harbour resides on. Integer is the head number. Default 0.</td>
+</tr>
+<tr>
+<td>HeadName</td>
+<td>string</td>
+<td>When RandR is on, decides on what head the harbour resides on by name (which could be found from  command). A special name "primary" connects to the primary head. This option overwrites Head.</td>
+</tr>
+<tr>
+<td>Opacity</td>
+<td>int</td>
+<td>Sets the opacity/transparency for the harbour. A value of 100 means completely opaque, while 0 stands for completely transparent.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Config File Elements under the DockApp-subsection of the Harbour-section:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SideMin</td>
+<td>int</td>
+<td>Controls the minimum size of dockapp clients. If a dockapp client is smaller than the minimum, it gets resized up to the SideMin value. Integer is a number of pixels.</td>
+</tr>
+<tr>
+<td>SideMax</td>
+<td>int</td>
+<td>Controls the maximum size of dockapp clients. If a dockapp client is larger than the maximum, it gets resized down to the SideMax value. Integer is a number of pixels.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="screen-subsections">Screen Subsections</h3>
+<p>There are two subsections in the screen section - Placement and
+UniqueNames. Placement can optionally have its own subsection. Sound
+hard? It's really not! It's actually quite simple.</p>
+<p>We'll start off with Placement. Placement has two options: Model, and
+a 'Smart' subsection. Model is very simple, it's simply a list of
+keywords that describes how to place new windows, such as "Smart
+MouseCentered". Secondly, there's a Smart section, which describes how
+pekwm computes where to place a new window in smart mode.</p>
+<p>The second subsection, UniqueNames, lets you configure how pekwm
+should handle similar client names. pekwm can add unique number
+identifiers to clients that have the same title so that instead of
+"terminal" and "terminal", you would end up with something like
+"terminal" and "terminal [2]".</p>
+<h2 id="configuring-the-menus">Configuring the menus</h2>
+<p>The root menu is what you get when you (by default- See the <a href="actions.html#actions">Mouse
+Bindings</a> section) left-click on the root window
+(also called the desktop). You can also configure the window menu,
+which you get when you right-click on a window title.</p>
+<h3 id="basic-menu-syntax">Basic Menu Syntax</h3>
+<p>As previously indicated, the root and window menus follow the rules
+defined in <a href="#common-syntax">Common Syntax</a>. There aren't many possible
+options, and they're all either within the main menu, or within a
+submenu. This is all handled by a single file.</p>
+<p>As an addition to the default menu types, RootMenu and WindowMenu, a user
+can define any number of new menus following the same syntax.</p>
+<p>Here's an example ~/.pekwm/menu file, where we have the usual RootMenu
+and WindowMenu and our own most used applications menu called
+MyOwnMenuName:</p>
+
+<pre># Menu config for pekwm
+
+# Variables
+$TERM = "xterm -fn fixed +sb -bg black -fg white"
+
+RootMenu = "pekwm" {
+    Entry = "Term" { Actions = "Exec $TERM" }
+    Entry = "Emacs" { Icon = "emacs.png"; Actions = "Exec $TERM -title emacs -e emacs -nw" }
+    Entry = "Vim" { Actions = "Exec $TERM -title vim -e vi" }
+
+    Separator {}
+
+    Submenu = "Utils" {
+        Entry = "XCalc" { Actions = "Exec xcalc" }
+        Entry = "XMan" { Actions = "Exec xman" }
+    }
+
+    Separator {}
+
+    Submenu = "pekwm" {
+        Entry = "Reload" { Actions = "Reload" }
+        Entry = "Restart" { Actions = "Restart" }
+        Entry = "Exit" { Actions = "Exit" }
+        Submenu = "Others" {
+            Entry = "Xterm" { Actions = "RestartOther xterm" }
+            Entry = "Twm" { Actions = "RestartOther twm" }
+        }
+        Submenu = "Themes" {
+            Entry { Actions = "Dynamic ~/.pekwm/scripts/pekwm_themeset.pl" }
+        }
+    }
+}
+
+WindowMenu = "Window Menu" {
+    Entry = "(Un)Stick" { Actions = "Toggle Sticky" }
+    Entry = "(Un)Shade" { Actions = "Toggle Shaded" }
+
+    ...
+
+    SubMenu = "Send To" {
+        Entry = "Workspace 1" { Actions = "SendToWorkspace 1" }
+        Entry = "Workspace 2" { Actions = "SendToWorkspace 2" }
+        Entry = "Workspace 3" { Actions = "SendToWorkspace 3" }
+        Entry = "Workspace 4" { Actions = "SendToWorkspace 4; GoToWorkspace 4" }
+    }
+    
+    ...
+
+    Entry = "Close" { Actions = "Close" }
+}
+
+MyOwnMenuName = "Most used apps" {
+    Entry = "Term" { Actions = "Exec $TERM" }
+    Entry = "XCalc" { Actions = "Exec xcalc" }
+    Entry = "Dillo" { Actions = "Exec dillo" }
+}
+</pre>
+<h3 id="menu-keywords">Menu Keywords</h3>
+<p>Here are the different elements that can be used in your root menu file.</p>
+<p><strong>Root Menu Elements:</strong></p>
+<p>Submenu (Name)</p>
+<p>Begins a submenu. 'name' is what will appear in the root menu for the entry.</p>
+<p>Entry (Name)</p>
+<p>Begins a menu entry. 'Name' is the text shown in the menu for this entry.</p>
+<p>Actions (Action)</p>
+<p>Run an action. 'Action' is the action(s) to run. Most actions listed
+in <a href="actions.html#actions">Keys/mouse actions</a> will also work from the
+root and window menus.</p>
+<p>Icon (Image)</p>
+<p>Set icon left of entry from image in icon path.</p>
+<p>Separator</p>
+<p>Adds a separator to the menu.</p>
+<p><strong>Menu Actions:</strong></p>
+<p>Exec</p>
+<p>Exec makes pekwm execute the command that follows it.</p>
+<p>Reload</p>
+<p>When this is called, pekwm will re-read all configuration files without exiting.</p>
+<p>Restart</p>
+<p>This will cause pekwm to exit and re-start completely.</p>
+<p>RestartOther</p>
+<p>Quits pekwm and starts another application. The application to run is given as a parameter.</p>
+<p>Exit</p>
+<p>Exits pekwm. Under a normal X setup, This will end your X session.</p>
+<p>Of course, in addition to these, many actions found from <a href="actions.html#actions">Keys/mouse
+actions</a> also work.</p>
+<hr/>
+<h3 id="custom-menus">Custom Menus</h3>
+<p>User can also define an unlimited amount of custom menus. They are
+called with the ShowMenu action much like the Root and Window menus
+are (see <a href="actions.html#actions">Keys/mouse actions</a>).</p>
+<p>In the example menu on this documentation, we created your own menu,
+called 'MyOwnMenuName'. Basically, outside of the RootMenu and
+WindowMenu sections, we open our own section called
+'MyOwnMenuName'. This can of course be called whatever you want it to
+be called, but do note that the menu names are case insensitive. This
+means you can't have one menu called 'MyMostUsedApps' and one called
+'mymostusedapps'.</p>
+<p>Lets see that example again, simplified:</p>
+
+<pre>RootMenu = "pekwm" { ... }
+WindowMenu = "Window Menu" { ... }
+MyOwnMenuName = "Most used apps" {
+    Entry = "Term" { Actions = "Exec $TERM" }
+    Entry = "XCalc" { Actions = "Exec xcalc" }
+    Entry = "Dillo" { Actions = "Exec dillo" }
+}
+</pre>
+<p>We would call this new menu using the action 'ShowMenu MyOwnMenuName',
+The menu would show 'Most used apps' as the menu title and list
+'Term', 'XCalc' and 'Dillo' in the menu ready to be executed.</p>
+<h3 id="dynamic-menus">Dynamic Menus</h3>
+<p>It is possible to use dynamic menus in pekwm, that is menus that
+regenerate themselves whenever the menu is viewed. This is done with
+the Dynamic keyword.</p>
+<p>To use this feature, you need to put a dynamic entry in the
+~/.pekwm/menu file with a parameter that tells pekwm what file to
+execute to get the menu. This file can be of any language you prefer,
+the main thing is that it outputs valid pekwm menu syntax inside a
+Dynamic {} section. The syntax of dynamic entry looks like this:</p>
+
+<pre>Entry = "" { Actions = "Dynamic /path/to/filename" }
+</pre>
+<p>The input from a program that creates the dynamic content should
+follow the general menu syntax encapsulated inside a Dynamic {}
+section. Variables have to be included inside the dynamic menu for
+them to work. A simple script to give pekwm dynamic menu content would
+look like this:</p>
+
+<pre>#!/bin/bash
+output=$RANDOM # gets a random number
+
+echo "Dynamic {"
+echo " Entry = \"$output\" { Actions = \"Exec xmessage $output\" }"
+echo "}"
+
+This script would output something like:
+
+Dynamic {
+ Entry = "31549" { Actions = "Exec xmessage 31549" }
+}
+</pre>
+<p>Clients can access the PID and Window that was active when the script
+was executed via the environment variables $CLIENT_PID and
+$CLIENT_WINDOW. $CLIENT_PID is only available if the client is being
+run on the same host as pekwm.</p>
+<h2 id="keyboard-and-mouse-configuration">Keyboard and Mouse Configuration</h2>
+<p>pekwm allows you to remap almost all keyboard and mouse events.</p>
+<h3 id="mouse-bindings">Mouse Bindings</h3>
+<p>The pekwm Mousebindings go in ~/.pekwm/mouse, and are very
+simple. They're divided up into two groups: The 'where' and
+'event'. Below is an example file:</p>
+
+<pre>FrameTitle {
+    ButtonRelease = "1" { Actions = "Raise; Focus; ActivateClient" }
+    ButtonRelease = "2" { Actions = "ActivateClient" }
+    ButtonRelease = "Mod4 3" { Actions = "Close" }
+    ButtonRelease = "3" { Actions = "ShowMenu Window" }
+    ButtonRelease = "4" { Actions = "ActivateClientRel 1" }
+    ButtonRelease = "5" { Actions = "ActivateClientRel -1" }
+    DoubleClick = "2" { Actions = "Toggle Shaded" }
+    DoubleClick = "1" { Actions = "MaxFill True True" }
+    Motion = "1" { Threshold = "4"; Actions = "Move" }
+    Motion = "Mod1 1" { Threshold = "4"; Actions = "Move" }
+    Motion = "Mod4 1" { Threshold = "4"; Actions = "Move" }
+    Motion = "2" { Threshold = "4"; Actions = "GroupingDrag True" }
+    Motion = "Mod1 3" { Actions = "Resize" }
+    Enter = "Any Any" { Actions = "Focus" }
+}
+
+OtherTitle {
+    ButtonRelease = "1" { Actions = "Raise; Focus; ActivateClient" }
+    ButtonRelease = "Mod4 3" { Actions = "Close" }
+    DoubleClick = "2" { Actions = "Toggle Shaded" }
+    DoubleClick = "1" { Actions = "MaxFill True True" }
+    Motion = "1" { Threshold = "4"; Actions = "Move" }
+    Motion = "Mod1 1" { Threshold = "4"; Actions = "Move" }
+    Motion = "Mod4 1" { Threshold = "4"; Actions = "Move" }
+    Motion = "Mod1 3" { Actions = "Resize" }
+    Enter = "Any Any" { Actions = "Focus" }
+}
+
+Border {
+    TopLeft     { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize TopLeft" } }
+    Top         { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Move" } }
+    TopRight    { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize TopRight" } }
+    Left        { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize Left" } }
+    Right       { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize Right" } }
+    BottomLeft  { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize BottomLeft" } }
+    Bottom      { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize Bottom" } }
+    BottomRight { Enter = "Any Any" { Actions = "Focus" }; ButtonPress = "1" { Actions = "Resize BottomRight" } }
+}
+
+ScreenEdge {
+    Down {
+        ButtonRelease = "3" { Actions = "ShowMenu Root" }
+        ButtonRelease = "2" { Actions = "ShowMenu Goto" }
+    }
+    Up {
+        ButtonRelease = "3" { Actions = "ShowMenu Root" }
+        ButtonRelease = "2" { Actions = "ShowMenu Goto" }
+        ButtonRelease = "Mod1 4" { Actions = "GoToWorkspace Right" }
+        ButtonRelease = "Mod1 5" { Actions = "GoToWorkspace Left" }
+    }
+    Left {
+        Enter = "Mod1 Any" { Actions = "GoToWorkspace Left" }
+        ButtonRelease = "3" { Actions = "ShowMenu Root" }
+        ButtonRelease = "1" { Actions = "GoToWorkspace Left" }
+        DoubleClick = "1" { Actions = "GoToWorkspace Left" }
+        ButtonRelease = "2" { Actions = "ShowMenu Goto" }
+        ButtonRelease = "4" { Actions = "GoToWorkspace Right" }
+        ButtonRelease = "5" { Actions = "GoToWorkspace Left" }
+    }
+    Right {
+        Enter = "Mod1 Any" { Actions = "GoToWorkspace Right" }
+        ButtonRelease = "3" { Actions = "ShowMenu Root" }
+        ButtonRelease = "1" { Actions = "GoToWorkspace Right" }
+        DoubleClick = "1" { Actions = "GoToWorkspace Right" }
+        ButtonRelease = "2" { Actions = "ShowMenu Goto" }
+        ButtonRelease = "4" { Actions = "GoToWorkspace Right" }
+        ButtonRelease = "5" { Actions = "GoToWorkspace Left" }
+    }
+}
+
+Client {
+    ButtonPress = "1" { Actions = "Focus" }
+    ButtonRelease = "Mod1 1" { Actions = "Focus; Raise" }
+    ButtonRelease = "Mod4 1" { Actions = "Lower" }
+    Motion = "Mod1 1" { Actions = "Focus; Raise; Move" }
+    Motion = "Mod4 1" { Actions = "Focus; Raise; Move" }
+    Motion = "Mod1 2" { Threshold = "4"; Actions = "GroupingDrag True" }
+    Motion = "Mod1 3" { Actions = "Resize" }
+    Enter = "Any Any" { Actions = "Focus" }
+}
+
+Root {
+    ButtonRelease = "3" { Actions = "ShowMenu Root" }
+    ButtonRelease = "2" { Actions = "ShowMenu Goto" }
+    ButtonRelease = "4" { Actions = "GoToWorkspace Right" }
+    ButtonRelease = "5" { Actions = "GoToWorkspace Left" }
+    ButtonRelease = "1" { Actions = "HideAllMenus" }
+}
+
+Menu {
+    Enter = "Any Any" { Actions = "Focus" }
+    ButtonRelease = "2" { Actions = "Toggle Sticky" }
+    Motion = "1" { Threshold = "10"; Actions = "Move" }
+    ButtonRelease = "3" { Actions = "Close" }
+}
+
+Other {
+    Enter = "Any Any" { Actions = "Focus" }
+    ButtonRelease = "Mod4 3" { Actions = "Close" }
+    Motion = "1" { Actions = "Focus; Raise; Move" }
+    Motion = "Mod1 1" { Actions = "Focus; Raise; Move" }
+}
+</pre>
+<p>Below you will find, the different fields defined. The actions themselves can be
+found in the <a href="actions.html#actions">Keys/mouse actions</a> section.</p>
+<p><strong>'Where' fields:</strong></p>
+<p>FrameTitle</p>
+<p>On a regular window's Titlebar.</p>
+<p>OtherTitle</p>
+<p>On menu/cmdDialog/etc pekwm's own window's Titlebar.</p>
+<p>Border</p>
+<p>On the window's borders. See <a href="#mouse-only-actions">Border Subsection</a> for more information.</p>
+<p>ScreenEdge</p>
+<p>On the screen edges. See <a href="#mouse-only-actions">ScreenEdge Subsection</a> for more information.</p>
+<p>Client</p>
+<p>Anywhere on the window's interior. It's best to use a keyboard modifier with these.</p>
+<p>Root</p>
+<p>On the Root window (also called the 'desktop').</p>
+<p>Menu</p>
+<p>On the various menus excluding their titlebars.</p>
+<p>Other</p>
+<p>On everything else that doesn't have its own section.</p>
+<p><strong>'Event' fields:</strong></p>
+<p>ButtonPress</p>
+<p>A single click</p>
+<p>ButtonRelease</p>
+<p>A single click that activates once the button is released</p>
+<p>DoubleClick</p>
+<p>A double click</p>
+<p>Motion</p>
+<p>Clicking, holding, and Dragging.</p>
+<p>Enter</p>
+<p>Defines how to act when mouse pointer enters a place defined by the 'where' field.</p>
+<p>Leave</p>
+<p>Defines how to act when mouse pointer leaves a place defined by the 'where' field.</p>
+<p>EnterMoving</p>
+<p>Defines how to act when a dragged window enters a ScreenEdge. Only works with screen edges.</p>
+<p>Definitions work like this:</p>
+
+<pre>'Where' {
+    'Event' = "optional modifiers, like mod1, ctrl, etc and a mouse button" {
+        Actions = "actions and their parameters"
+    }
+    'Event' = "optional modifiers, like mod1, ctrl, etc and a mouse button" {
+        Actions = "actions and their parameters"
+    }
+}
+</pre>
+<blockquote><p><strong>Additional notes.</strong></p>
+<p>Modifiers and mouse buttons can be defined as "Any" which is useful
+for Enter and Leave events. Any also applies as none. Motion events
+have a threshold argument; this is the number of pixels you must
+drag your mouse before they begin to work. Multiple actions can be
+defined for a single user action. Example:</p>
+</blockquote>
+<pre>Motion = "1" { Actions = "Move"; Treshold = "3" }
+ButtonPress = "1" { Actions = "Raise; ActivateClient" }
+</pre>
+<h3 id="border-subsection">Border Subsection</h3>
+<p>The Border subsection in ~/.pekwm/mouse defines the actions to take
+when handling the window borders.</p>
+
+<pre>Border {
+    TopLeft {
+        Enter = "Any Any" { Actions = "Focus" }
+        ButtonPress = "1" { Actions = "Resize TopLeft" }
+    }
+}
+</pre>
+<p>It's subsections refer to the frame part in question. They are: Top,
+Bottom, Left, Right, TopLeft, TopRight, BottomLeft, and
+BottomRight. In these subsections you can define events and actions as
+usual.</p>
+<h3 id="screenedge-subsection">ScreenEdge Subsection</h3>
+<p>The ScreenEdge subsection in ~/.pekwm/mouse defines the actions to
+take when an event happens on the specified screenedge.</p>
+
+<pre>ScreenEdge {
+    Left {
+        Enter = "Mod1 Any" { Actions = "GoToWorkspace Left" }
+        ButtonPress = "3" { Actions = "ShowMenu Root" }
+        ButtonPress = "1" { Actions = "GoToWorkspace Left" }
+        ButtonPress = "2" { Actions = "ShowMenu Goto" }
+        ButtonPress = "4" { Actions = "GoToWorkspace Right" }
+        ButtonPress = "5" { Actions = "GoToWorkspace Left" }
+    }
+}
+</pre>
+<p>It has four subsections: Up, Down, Left, and Right, that all refer to
+the screen edge in question. In these subsections you can give events
+and actions as usual.</p>
+<h3 id="key-bindings">Key Bindings</h3>
+<p>The pekwm keybindings go in ~/.pekwm/keys, and are even more simple
+than the mouse bindings. Here's the format:</p>
+
+<pre>KeyPress = "optional modifiers like mod1, ctrl, etc and the key" {
+    Actions = "action and the parameters for the action, if they are needed"
+}
+</pre>
+<p>Multiple actions can be drawn from one keypress. The actions are
+separated from each other with a semicolon:</p>
+
+<pre>Keypress = "Ctrl t" { Actions = "Exec xterm; Set Maximized True True; Close" }
+</pre>
+<p>Here's a small fragment of an example keys file; you can see a full
+version in ~/.pekwm/keys. As with the mouse, you can see the full list
+of actions in the <a href="actions.html#actions">Keys/mouse actions</a>
+section.</p>
+
+<pre>Global {
+    # Moving in frames
+    KeyPress = "Mod1 Tab" { Actions = "NextFrame EndRaise" }
+    KeyPress = "Mod1 Shift Tab" { Actions = "PrevFrame EndRaise" }
+    KeyPress = "Mod1 Ctrl Tab" { Actions = "NextFrameMRU EndRaise" }
+    KeyPress = "Mod1 Ctrl Shift Tab" { Actions = "PrevFrameMRU EndRaise" }
+    # Simple window management
+    KeyPress = "Mod4 M" { Actions = "Toggle Maximized True True" }
+    KeyPress = "Mod4 G" { Actions = "Maxfill True True" }
+    KeyPress = "Mod4 F" { Actions = "Toggle FullScreen" }
+    KeyPress = "Mod4 Return" { Actions = "MoveResize" }
+    # Wm actions
+    Chain = "Ctrl Mod4 P" {
+        KeyPress = "Delete" { Actions = "Reload" }
+        KeyPress = "Next" { Actions = "Restart" }
+        KeyPress = "End" { Actions = "Exit" }
+        KeyPress = "Prior" { Actions = "RestartOther twm" }
+    }
+}
+
+MoveResize {
+    KeyPress = "Left" { Actions = "MoveHorizontal -10" }
+    KeyPress = "Right" { Actions = "MoveHorizontal 10" }
+    KeyPress = "Up" { Actions = "MoveVertical -10" }
+    KeyPress = "Down" { Actions = "MoveVertical 10" }
+    Keypress = "Mod4 Left" { Actions = "ResizeHorizontal -10" }
+    Keypress = "Mod4 Right" { Actions = "ResizeHorizontal 10" }
+    Keypress = "Mod4 Up" { Actions = "ResizeVertical -10" }
+    Keypress = "Mod4 Down" { Actions = "ResizeVertical 10" }
+    Keypress = "s" { Actions = "MoveSnap" }
+    Keypress = "Escape" { Actions = "Cancel" }
+    Keypress = "Return" { Actions = "End" }
+}
+
+Menu {
+    KeyPress = "Down" { Actions = "NextItem" }
+    KeyPress = "Up" { Actions = "PrevItem" }
+    KeyPress = "Left" { Actions = "LeaveSubmenu" }
+    KeyPress = "Right" { Actions = "EnterSubmenu" }
+    KeyPress = "Return" { Actions = "Select" }
+    KeyPress = "Escape" { Actions = "Close" }
+}
+
+InputDialog {
+    KeyPress = "BackSpace" { Actions = "Erase" }
+    KeyPress = "Right" { Actions = "CursNext" }
+    KeyPress = "Left" { Actions = "CursPrev" }
+    KeyPress = "Up" { Actions = "HistPrev" }
+    KeyPress = "Down" { Actions = "HistNext" }
+    KeyPress = "Delete" { Actions = "Clear" }
+    KeyPress = "Return" { Actions = "Exec" }
+    KeyPress = "Escape" { Actions = "Close" }
+    KeyPress = "Any Any" { Actions = "Insert" }
+}
+</pre>
+<p>As you might have noticed, the file consist of four sections. These
+sections are Global, MoveResize, Menu and InputDialog. The first
+section, Global, contains all the generic actions.</p>
+<p>The MoveResize section has the keybindings that will get used when the
+MoveResize action is called.</p>
+<p>Menu section contains the keys that are used when the ShowMenu action
+is called. E.g. these are the keys you use to browse thru the menus of
+pekwm. Note that while ShowMenu is active, the Global keybindings are
+also listened. If a keybinding is same in both Menu and Global
+sections, keybindings in Menu section override the global keybinding
+as long as a menu is active.</p>
+<p>Finally, the InputDialog section allow for tuning of what keys are
+available for line editing when the CmdDialog window that enables the
+user to enter pekwm actions for running windows is active.</p>
+<p>Keys can be identified with their XString name or with their
+keycode. Both can be found out using the X application <strong>xev</strong>. If you
+want to use a keycode, prefix it with <strong>#</strong>.</p>
+<h3 id="keychains">Keychains</h3>
+<p>pekwm also supports keychains. Keychain syntax follows the general
+config syntax and looks like this:</p>
+
+<pre>Chain = "modifiers and key" {
+    Chain = "modifiers and key" {
+        KeyPress = "modifiers and key" { Actions = "actions and their parameters" }
+    }
+    Keypress = "modifiers and key" { Actions = "actions and their parameters" }
+}
+</pre>
+<p>It might seem complicated at start but once you look into it, it is
+fairly nice and logical. This syntax supports as many nested Chains as
+you might want.</p>
+<p>Now for some examples. Here we have a simple nested chain that lets
+you press Ctrl+Alt+M, then M, then M, V or H to toggle maximized
+attribute into Full/Vertical or Horizontal, and a simpler one level
+chain that brings up the root menu.</p>
+
+<pre>Chain = "Ctrl Mod4 A" {
+    Chain = "M" {
+        KeyPress = "M" { Actions = "Toggle Maximized True True" }
+        KeyPress = "V" { Actions = "Toggle Maximized False True" }
+        KeyPress = "H" { Actions = "Toggle Maximized True False" }
+    }
+}
+Chain = "Ctrl Mod4 M" {
+    KeyPress = "R" { Actions = "ShowMenu Root" }
+}
+</pre>
+<p>This next rule is a pure show-off, it lets you type in 'test' and then
+executes xterm. Note that this will make you unable to type the
+character 't' to any programs.</p>
+
+<pre>Chain = "t" { Chain = "e" { Chain = "s" {
+    Keypress = "t" { Actions = "Exec xterm" }
+} } }
+</pre>
+<p><a href="actions.html">Actions</a></p>
+<h2 id="the-pekwm-start-file">The pekwm start file</h2>
+<p>The ~/.pekwm/start file is the simplest of all of pekwm's config
+files. It's a simple shell script that's run on pekwm
+startup. Therefore, to run, it needs to be set executable with <strong>chmod
++x ~/.pekwm/start</strong>.</p>
+<p>Why would anyone use start rather than just use their ~/.xinitrc file?
+Well, the answer is, the start file is executed during the pekwm
+initialization phase - therefore, it gets re-executed when you issue a
+pekwm 'restart'.</p>
+<p>Here's an example pekwm start file. Be careful to place long running
+applications to the background, or you will seem stuck when trying to
+start pekwm.</p>
+
+<pre>#!/bin/sh
+
+xmessage 'hi. pekwm started.' &
+some_command &
+</pre>
+<hr/>
+<p><a href="basic-usage.html">< Previous (Basic Usage)</a>
+- <a href="index.html">Up</a>
+- <a href="autoproperties.html">(Autoproperties) Next ></a></p>
+      <div>
+    </div>
+  </body>
+</html>

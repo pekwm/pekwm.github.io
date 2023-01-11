@@ -6,12 +6,20 @@
 
 body {
     line-height: 1.7em;
-    color: #fff;
     font-size: 13px;
 }
 
 h1, h2, h3, h4, h5, h6, label {
-    color: #ec6f08;
+    color: #576474;
+}
+
+a, a:link, a:visited {
+    color: #576474;
+    text-decoration: none;
+}
+a:active {
+    color: #576474;
+    text-decoration: underline;
 }
 
 .pure-img-responsive {
@@ -25,17 +33,10 @@ h1, h2, h3, h4, h5, h6, label {
 
 .l-box-lrg-odd {
     padding: 2em;
-    background: #666;
 }
 
 .l-box-lrg-even {
     padding: 2em;
-    background: #ccc;
-    color: #000;
-}
-
-.l-box-lrg-even .content-head {
-    color: #494949;   
 }
 
 .is-center {
@@ -57,7 +58,7 @@ h1, h2, h3, h4, h5, h6, label {
 }
 
 .pure-button {
-    background-color: #ec6f08;
+    background-color: #576474;
     color: white;
     padding: 0.5em 2em;
     border-radius: 5px;
@@ -65,7 +66,7 @@ h1, h2, h3, h4, h5, h6, label {
 
 a.pure-button-primary {
     background: white;
-    color: #ec6f08;
+    color: #576474;
     border-radius: 5px;
     font-size: 120%;
 }
@@ -94,18 +95,16 @@ a.pure-button-primary {
 }
 
 .home-menu a {
-    color: #ec6f08;
+    color: #576474;
 }
 .home-menu li a:hover,
 .home-menu li a:focus {
     background: none;
     border: none;
-    color: #ec6f08;
+    color: #576474;
 }
 
 .splash-container {
-    background: #ccc;
-    color: #000;
     z-index: 1;
     overflow: hidden;
     /* The following styles are required for the "scroll-over" effect */
@@ -131,7 +130,6 @@ a.pure-button-primary {
 .splash-head {
     font-size: 20px;
     font-weight: bold;
-    color: white;
     border: 3px solid white;
     padding: 1em 1.6em;
     font-weight: 100;
@@ -141,7 +139,6 @@ a.pure-button-primary {
 
 /* This is the subheading that appears on the blue section */
 .splash-subhead {
-    color: #000;
     letter-spacing: 0.05em;
     opacity: 0.8;
 }
@@ -153,13 +150,10 @@ a.pure-button-primary {
     width: 100%;
     min-height: 12%;
     z-index: 2;
-    background: white;
-
 }
 
 /* We want to give the content area some more padding */
 .content {
-    color: #000;
     padding: 1em 1em 3em;
 }
 
@@ -171,14 +165,9 @@ a.pure-button-primary {
     margin: 1em 0 1em;
 }
 
-/* This is a modifier class used when the content-head is inside a ribbon */
-.content-head-ribbon {
-    color: white;
-}
-
 /* This is the class used for the content sub-headers (<h3>) */
 .content-subhead {
-    color: #ec6f08;
+    color: #576474;
 }
 .content-subhead i {
     margin-right: 7px;
@@ -192,6 +181,7 @@ a.pure-button-primary {
 /* This is the class used for the footer */
 .footer {
     background: #111;
+    color: #fff;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -252,19 +242,108 @@ a.pure-button-primary {
 pre {
     font-size: 0.9em;
     line-height: 1.1em;
-    color: #000;
-    background-color: #eee;
-    padding: 0.2em;
     overflow-y: scroll;
+    padding: 1em;
+    border-radius: 5px;
 }
 
-.hl-kw {
-    color: #ec6f08;
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #000;
+    }
+    pre {
+        color: #fff;
+        background-color: #666;
+    }
+    .hl-kw {
+        font-weight: bold;
+    }
+    .hl-comment {
+        color: #ccc;
+    }
+    .hl-text {
+        color: #fff;
+        background-color: #999;
+    }
+    .splash-container {
+        background: #666;
+        color: #fff;
+    }
+    .splash-head {
+        color: #fff;
+    }
+    .splash-subhead {
+        color: #fff;
+    }
+    .content {
+        color: #fff;
+	background: #000;
+    }
+    .content-wrapper {
+        color: #000;
+    }
+    .content-head-ribbon {
+        color: #e1d4cc;
+    }
+    .l-box-lrg-odd {
+        background: #333;
+	color: #fff;
+    }
+    .l-box-lrg-even {
+        background: #666;
+        color: #fff;
+    }
+    .l-box-lrg-even .content-head {
+        color: #e1d4cc;
+    }
 }
-.hl-comment {
-    color: #999;
-}
-.hl-text {
-    color: #000;
-    background-color: #fff;
+
+@media (prefers-color-scheme: light) {
+    body {
+        color: #fff;
+    }
+    pre {
+        color: #000;
+        background-color: #eee;
+    }
+    .hl-kw {
+        color: #576474;
+    }
+    .hl-comment {
+        color: #999;
+    }
+    .hl-text {
+        color: #000;
+        background-color: #fff;
+    }
+    .splash-container {
+        background: #ccc;
+        color: #000;
+    }
+    .splash-head {
+        color: #000;
+    }
+    .splash-subhead {
+        color: #000;
+    }
+    .content {
+        color: #000;
+	background: #fff;
+    }
+    .content-wrapper {
+        color: #fff;
+    }
+    .content-head-ribbon {
+        color: #fff;
+    }
+    .l-box-lrg-odd {
+        background: #666;
+    }
+    .l-box-lrg-even {
+        background: #ccc;
+        color: #000;
+    }
+    .l-box-lrg-even .content-head {
+        color: #494949;   
+    }
 }

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pekwm documentation: Development</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css"
+          integrity="sha384-LTIDeidl25h2dPxrB2Ekgc9c7sEC3CWGM6HeFmuDNUjX76Ert4Z4IY714dhZHPLd"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://www.pekwm.se/pekwm.css">
+    <link rel="stylesheet" href="pekwm-doc.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="https://pekdon.pekwm.se" class="pure-menu-link">Blog</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/doc/" class="pure-menu-link">Doc</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/themes/" class="pure-menu-link">Themes</a>
+          </li>
+          <li class="pure-menu-item pure-menu-item-selected">
+            <a href="https://www.pekwm.se/" class="pure-menu-link">Pekwm</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="https://github.com/pekdon/pekwm" class="pure-menu-link">Develop on Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+<p><a href="faq.html">< Previous (FAQ)</a>
+- <a href="index.html">Up</a>
+- Next ></p>
+<hr/>
+<h1 id="development">Development</h1>
+<p>Interested in pekwm? Want to keep up with the development? Great, we
+can tell you how.</p>
+<p><strong>Table of Contents</strong></p>
+<ol>
+<li><a href="#irc">IRC</a></li>
+<li><a href="#issue-tracker">Issue Tracker</a></li>
+<li><a href="#the-developer">The developers</a></li>
+</ol>
+<h2 id="irc">IRC</h2>
+<p>Our IRC channel #pekwm is located on <a href="https://libera.chat">Libera.Chat</a>.
+Join if you want to ask questions, share thoughts and ideas or idle as much as
+you like.</p>
+<p>The following is a "do not" list. If some idiotic behaviour like,
+public away messages, or nick changing as a way of telling what you
+are doing, are not mentioned it doesn't mean you can do them.</p>
+<p>As it seems to be a problem for some, do not ask questions in IRC
+unless you are willing to listen to the answer. If listening is your
+problem, you need other help than what we at IRC can provide.</p>
+<p>If you have a question, ask it. It doesn't help to go around shouting
+"can anyone help me". Help you with what? This will help the right
+people to make initial contact with you, saving your time and adding
+less clutter to the channel.</p>
+<p>For the same reasons, don't ask if we are alive or other meaningless
+questions leading to the real question. Don't ask if someone specific
+is around either. This is not the pager channel for you and your
+friends.</p>
+<p>Do not ask for help from one person only. The fact is, even if you think he or
+she must be the only one who knows the answer, you are wrong. There's
+at least a handful of people lurking on the channel who could help
+you.</p>
+<p>Read the documentation and FAQ before you ask anything. Doing this is
+common courtesy towards the people who answer your questions. Not
+reading at least the FAQ will be considered rude.</p>
+<p>When asking a question, the answer more than often depends on the
+version of pekwm you use. Showing us the information the command
+<strong>pekwm --info</strong> gives, will help us help you.</p>
+<p>Do not expect people to answer your questions during the two minutes
+you stay in the channel. We can't sit there all the time waiting for
+your questions. If you can't wait longer, think about how stressful
+your life is, take a break, go on a vacation, take it easy for a
+while.</p>
+<p>For similar reasons, don't repeat yourself. We saw it the first
+time. Repeating easily gets you ignored completely so it eats its own
+purpose. It's also considered rude, much like cutting in line.</p>
+<p>If people tell you to read the documentation, they have a good reason
+to do so. If they include a URL that helps you find the info quicker,
+offer them your firstborn as a payback.</p>
+<p>Don't offend anyone. They will offend you back two times.</p>
+<p>Nicks with excessive capital letters will be hunted down and shot on
+sight. You might as well use a proper nick to start with to avoid
+this.</p>
+<p>You can check the <a href="#devel-who">developers</a> section to see the list of
+developers mapped to their IRC nicks.</p>
+<p>As with all IRC channels, it's best to not do anything too drastic
+before keeping an eye for a while on how the channel works. We won't
+mind even if you just idle there, there are long standing traditions
+on that.</p>
+<p>Welcome aboard!</p>
+<h2 id="issue-tracker">Issue Tracker</h2>
+<p>pekwm bugs, feature requests and what-not are filed on Github issue
+tracker available at <a href="https://github.com/pekdon/pekwm/issues">https://github.com/pekdon/pekwm/issues</a></p>
+<p>When reporting a bug or other misbehavior please provide as much
+information as possible, including but not limited to:</p>
+<ol>
+<li>How is the issue reproduced?</li>
+<li>What did you expect to happen, what did actually happen?</li>
+<li>Version of pekwm and other applications used.</li>
+<li>Output of pekwm --info</li>
+</ol>
+<h3 id="gathering-pekwm-log-files">Gathering pekwm log files</h3>
+<p>To provide more details it is possible to run pekwm with the log level
+set to trace and log to file. If the issue appears during start of
+pekwm, start pekwm like this:</p>
+
+<pre>pekwm --log-file issue.log --log-level trace
+</pre>
+<p>If the issue is reproducible while pekwm is running, it is recommended
+to set the log level and log file while reproducing the issue to avoid
+including potential misleading information.</p>
+<p>Run the following commands using the CmdDialog or pekwm_ctrl before
+reproducing the issue.</p>
+
+<pre>Debug level trace
+Debug enable logfile
+Debug logfile issue.log
+</pre>
+<p>And directly after the issue has been reproduced:</p>
+
+<pre>Debug disable logfile
+</pre>
+<p>Include the issue.log in the error report if it includes any
+information.</p>
+<h3 id="gathering-information-about-a-pekwm-crash">Gathering information about a pekwm crash</h3>
+<p>If pekwm crashes, please provide a stack trace from the core dump, if no
+core (or pekwm_wm.core). To ensure a core file is generated enable core
+dumps before starting pekwm:</p>
+
+<pre>ulimit -c unlimited
+exec pekwm
+</pre>
+<p>If a core file has been created, generate a backtrace by running:</p>
+
+<pre>$ gdb /path/to/pekwm_wm core
+(gdb) bt
+#0 ...
+(gdb)
+</pre>
+<p>The output between the two <em>(gdb)</em> lines should be included in the
+report.</p>
+<h3 id="running-pekwm_wm-in-standalone-mode">Running pekwm_wm in standalone mode</h3>
+<p>pekwm, starting from 0.2.0 consists of the two programs pekwm and pekwm_wm.
+pekwm is a small application only responsible for starting pekwm_wm and
+ensuring it is restarted in case of a crash avoiding the X11 session to end.
+pekwm_wm does all the heavy lifting and is the likely location for bugs.</p>
+<p>When debugging, it can be helpful to start pekwm_wm in standalone mode. To
+do so use the <strong>--standalone</strong> option, which must be the first argument to
+pekwm_wm.</p>
+<p>Example starting pekwm_wm in standalone mode inside of gdb:</p>
+
+<pre>$ gdb --args pekwm_wm --standalone
+</pre>
+<h2 id="the-developers">The developers</h2>
+<p>Below is a list of pekwm developers and what they do. The email
+address is more of an informational thing than anything else; the
+developers all subscribe to the + <a href="http://pekwm.org/projects/pekwm/mailing_lists/15">pekwm mailing
+list</a>, so you should
+email that instead.</p>
+<h3 id="developers">Developers</h3>
+<p>Claes Nästén (aka pekdon) <a href="mailto:pekdon@gmail.com">pekdon@gmail.com</a></p>
+<p>Main developer- Writes code. Has a serious screenshot fetish.</p>
+<h3 id="past-developers">Past developers</h3>
+<p>Andreas Schlick (aka ioerror)</p>
+<p>Maintainer.</p>
+<p>Jyri Jokinen (aka shared) <a href="mailto:shared@adresh.com">shared@adresh.com</a></p>
+<p>Writes documentation. Acts ill-tempered. You have been warned.</p>
+<hr/>
+<p><a href="faq.html">< Previous (FAQ)</a>
+- <a href="index.html">Up</a>
+- Next ></p>
+      <div>
+    </div>
+  </body>
+</html>
